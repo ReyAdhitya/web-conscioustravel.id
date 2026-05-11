@@ -76,11 +76,21 @@ const mockTours: Tour[] = [
 ];
 
 export async function getFeaturedTours(): Promise<Tour[]> {
-  return mockTours;
+  return mockTours.filter((t) => !t.archivedAt);
 }
 
-export async function getAllTours(): Promise<Tour[]> {
-  return mockTours.filter((t) => !t.archivedAt);
+type TourFilters = {
+  category?: Tour["category"];
+  kind?: Tour["kind"];
+};
+
+export async function getAllTours(filters: TourFilters = {}): Promise<Tour[]> {
+  return mockTours.filter((t) => {
+    if (t.archivedAt) return false;
+    if (filters.category && t.category !== filters.category) return false;
+    if (filters.kind && t.kind !== filters.kind) return false;
+    return true;
+  });
 }
 
 export async function getTourBySlug(slug: string): Promise<Tour | null> {
