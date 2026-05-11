@@ -1,19 +1,19 @@
-import type { Booking } from "@/lib/db/schema";
-
-// TODO: Replace with Drizzle queries against the bookings table once
-// DATABASE_URL is wired. Module-level Map is in-memory only (lost on
-// dev server restart) — fine for the booking flow demo.
-const bookings = new Map<string, Booking>();
+import { eq } from "drizzle-orm";
+import { db } from "@/lib/db/client";
+import { bookings, type Booking } from "@/lib/db/schema";
 
 export async function createBookingRecord(
   booking: Omit<Booking, "createdAt" | "updatedAt">,
 ): Promise<Booking> {
-  const now = new Date();
-  const stored: Booking = { ...booking, createdAt: now, updatedAt: now };
-  bookings.set(booking.reference, stored);
-  return stored;
+  const [created] = await db.insert(bookings).values(booking).returning();
+  return created;
 }
 
 export async function getBookingByReference(reference: string): Promise<Booking | null> {
-  return bookings.get(reference) ?? null;
+  const [found] = await db
+    .select()
+    .from(bookings)
+    .where(eq(bookings.reference, reference))
+    .limit(1);
+  return found ?? null;
 }

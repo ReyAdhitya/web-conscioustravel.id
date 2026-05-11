@@ -8,6 +8,13 @@
       "when": 1778478740667,
       "tag": "0000_condemned_longshot",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1778502952499,
+      "tag": "0001_safe_susan_delgado",
+      "breakpoints": true
     }
   ]
 }

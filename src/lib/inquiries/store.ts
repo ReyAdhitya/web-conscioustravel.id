@@ -1,17 +1,19 @@
-import type { Inquiry } from "@/lib/db/schema";
-
-// TODO: Replace with Drizzle queries against the `inquiries` table.
-const inquiries = new Map<string, Inquiry>();
+import { eq } from "drizzle-orm";
+import { db } from "@/lib/db/client";
+import { inquiries, type Inquiry } from "@/lib/db/schema";
 
 export async function createInquiryRecord(
   inquiry: Omit<Inquiry, "createdAt" | "updatedAt">,
 ): Promise<Inquiry> {
-  const now = new Date();
-  const stored: Inquiry = { ...inquiry, createdAt: now, updatedAt: now };
-  inquiries.set(inquiry.reference, stored);
-  return stored;
+  const [created] = await db.insert(inquiries).values(inquiry).returning();
+  return created;
 }
 
 export async function getInquiryByReference(reference: string): Promise<Inquiry | null> {
-  return inquiries.get(reference) ?? null;
+  const [found] = await db
+    .select()
+    .from(inquiries)
+    .where(eq(inquiries.reference, reference))
+    .limit(1);
+  return found ?? null;
 }

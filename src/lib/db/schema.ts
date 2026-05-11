@@ -99,9 +99,7 @@ export const bookings = pgTable(
   {
     id: uuid("id").defaultRandom().primaryKey(),
     reference: text("reference").notNull(),
-    departureId: uuid("departure_id")
-      .notNull()
-      .references(() => departures.id, { onDelete: "restrict" }),
+    departureId: uuid("departure_id").references(() => departures.id, { onDelete: "restrict" }),
     contactName: text("contact_name").notNull(),
     contactEmail: text("contact_email").notNull(),
     contactPhone: text("contact_phone").notNull(),

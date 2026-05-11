@@ -52,7 +52,7 @@ export async function submitCheckout(
   await createBookingRecord({
     id: randomUUID(),
     reference,
-    departureId: "00000000-0000-0000-0000-000000000000", // TODO: real departure once we wire DB
+    departureId: null, // TODO: assign a real departure once the date picker UI lands
     contactName: parsed.data.contactName,
     contactEmail: parsed.data.contactEmail,
     contactPhone: parsed.data.contactPhone,
