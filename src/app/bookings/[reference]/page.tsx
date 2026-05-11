@@ -78,25 +78,29 @@ export default async function BookingConfirmationPage({
           </dl>
         </div>
 
-        <div className="mt-8 rounded-xl border border-dashed border-border/60 bg-background p-8">
+        <div className="mt-8 rounded-xl border border-dashed border-accent/40 bg-accent/5 p-8">
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-accent/15 px-3 py-1 text-[10px] tracking-[0.2em] uppercase text-accent">
+            Demo mode
+          </div>
           <h2 className="font-serif text-xl tracking-tight text-foreground">
-            Bank transfer instructions
+            Payment instructions (placeholder)
           </h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Online payment (Midtrans + Stripe) lands in the next build chunk. For now:
+            This block becomes real once the business bank account, Resend (email API), and
+            Midtrans + Stripe gateways are wired. Until then the values below are demo data.
           </p>
           <dl className="mt-6 grid gap-3 text-sm">
             <div className="flex justify-between border-b border-border/40 pb-2">
               <dt className="text-muted-foreground">Bank</dt>
-              <dd className="text-foreground">BCA · Bank Central Asia</dd>
+              <dd className="text-foreground">BCA · Bank Central Asia <span className="text-muted-foreground">(demo)</span></dd>
             </div>
             <div className="flex justify-between border-b border-border/40 pb-2">
               <dt className="text-muted-foreground">Account name</dt>
-              <dd className="text-foreground">PT Conscious Travel Indonesia</dd>
+              <dd className="text-foreground">PT Conscious Travel Indonesia <span className="text-muted-foreground">(demo)</span></dd>
             </div>
             <div className="flex justify-between border-b border-border/40 pb-2">
               <dt className="text-muted-foreground">Account number</dt>
-              <dd className="font-mono text-foreground">000-000-0000</dd>
+              <dd className="font-mono text-muted-foreground italic">— pending real account —</dd>
             </div>
             <div className="flex justify-between">
               <dt className="text-muted-foreground">Amount</dt>
@@ -104,9 +108,8 @@ export default async function BookingConfirmationPage({
             </div>
           </dl>
           <p className="mt-4 text-xs text-muted-foreground">
-            Use <span className="font-mono text-foreground">{booking.reference}</span> as the
-            transfer reference. Email a screenshot to{" "}
-            <span className="text-foreground">bookings@conscioustravel.id</span> once paid.
+            Reference code <span className="font-mono text-foreground">{booking.reference}</span>{" "}
+            is real and unique. The email mentioned above is not actually sent yet.
           </p>
         </div>
 
