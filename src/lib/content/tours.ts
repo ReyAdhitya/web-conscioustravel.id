@@ -13,7 +13,8 @@ const mockTours: Tour[] = [
     durationDays: 7,
     basePriceMinor: BigInt(12500000),
     baseCurrency: "IDR",
-    heroImageUrl: "",
+    heroImageUrl:
+      "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1800&auto=format&q=80&fit=crop",
     galleryImageUrls: [],
     inclusions: ["All meals (plant-based)", "Daily yoga + meditation", "Airport transfers", "Local guide"],
     exclusions: ["International flights", "Personal spa treatments"],
@@ -45,7 +46,8 @@ const mockTours: Tour[] = [
     durationDays: 6,
     basePriceMinor: BigInt(18000000),
     baseCurrency: "IDR",
-    heroImageUrl: "",
+    heroImageUrl:
+      "https://images.unsplash.com/photo-1601762603339-fd61e28b698a?w=1800&auto=format&q=80&fit=crop",
     galleryImageUrls: [],
     inclusions: ["Phinisi cabin", "All meals", "Snorkel equipment", "National-park fees", "Local naturalist guide"],
     exclusions: ["Flights to Labuan Bajo", "Diving (PADI guides available on request)"],
@@ -76,7 +78,8 @@ const mockTours: Tour[] = [
     durationDays: 3,
     basePriceMinor: BigInt(4500000),
     baseCurrency: "IDR",
-    heroImageUrl: "",
+    heroImageUrl:
+      "https://images.unsplash.com/photo-1604999565976-8913ad2ddb7c?w=1800&auto=format&q=80&fit=crop",
     galleryImageUrls: [],
     inclusions: ["Breakfast", "Welcome dinner", "Village orientation walk"],
     exclusions: ["Other meals", "Activities (priced à la carte)"],

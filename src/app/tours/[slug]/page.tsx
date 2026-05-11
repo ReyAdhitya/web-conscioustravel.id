@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -61,18 +62,28 @@ export default async function TourDetailPage({
   return (
     <>
       <section
-        className={`relative flex min-h-[55vh] flex-col justify-end overflow-hidden bg-gradient-to-br px-6 py-16 sm:px-12 lg:px-20 ${categoryGradients[tour.category]}`}
+        className={`relative flex min-h-[60vh] flex-col justify-end overflow-hidden bg-gradient-to-br px-6 py-16 sm:px-12 lg:px-20 ${categoryGradients[tour.category]}`}
       >
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_20%,rgba(255,255,255,0.18),transparent_60%)]" />
-        <div className="relative mx-auto w-full max-w-7xl">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-background/90 px-3 py-1 text-[10px] tracking-[0.2em] uppercase">
+        {tour.heroImageUrl && (
+          <Image
+            src={tour.heroImageUrl}
+            alt={tour.title}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/20 to-black/10" />
+        <div className="relative mx-auto w-full max-w-7xl text-white">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/95 px-3 py-1 text-[10px] tracking-[0.2em] uppercase text-foreground">
             {categoryLabel[tour.category]}
             {tour.kind === "open" && <span className="text-muted-foreground">· flexible dates</span>}
           </div>
-          <h1 className="font-serif text-4xl leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+          <h1 className="font-serif text-4xl leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
             {tour.title}
           </h1>
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-foreground/90 sm:text-lg">
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/90 sm:text-lg">
             {tour.shortDescription}
           </p>
         </div>

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Tour } from "@/lib/db/schema";
 import { formatPrice } from "@/lib/format";
@@ -25,7 +26,18 @@ export function TourCard({ tour }: { tour: Tour }) {
       <div
         className={`relative aspect-[4/5] w-full overflow-hidden bg-gradient-to-br ${categoryGradients[tour.category]}`}
       >
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_20%,rgba(255,255,255,0.15),transparent_60%)]" />
+        {tour.heroImageUrl ? (
+          <Image
+            src={tour.heroImageUrl}
+            alt={tour.title}
+            fill
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            className="object-cover transition duration-700 group-hover:scale-105"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_20%,rgba(255,255,255,0.15),transparent_60%)]" />
+        )}
+        <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/40 to-transparent" />
         <div className="absolute top-4 left-4 inline-flex items-center gap-2 rounded-full bg-background/90 px-3 py-1 text-[10px] tracking-[0.2em] uppercase">
           {categoryLabel[tour.category]}
           {tour.kind === "open" && (
