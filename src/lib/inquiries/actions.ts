@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { randomUUID } from "node:crypto";
 import { generateBookingReference } from "@/lib/bookings/reference";
+import { sendInquiryReceived } from "@/lib/email";
 import { createInquiryRecord } from "./store";
 
 const optionalDate = z
@@ -94,6 +95,16 @@ export async function submitInquiry(
     status: "new",
     internalNotes: null,
   });
+
+  try {
+    await sendInquiryReceived({
+      to: data.contactEmail,
+      firstName: data.contactName.split(" ")[0] ?? data.contactName,
+      reference,
+    });
+  } catch (e) {
+    console.error("[inquiry] failed to send confirmation email:", e);
+  }
 
   redirect(`/inquiries/${reference}`);
 }

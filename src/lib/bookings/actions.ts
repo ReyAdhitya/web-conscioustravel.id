@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { randomUUID } from "node:crypto";
 import { getTourBySlug } from "@/lib/content/tours";
+import { sendBookingConfirmation } from "@/lib/email";
+import { formatPrice } from "@/lib/format";
 import { generateBookingReference } from "./reference";
 import { createBookingRecord } from "./store";
 
@@ -64,6 +66,19 @@ export async function submitCheckout(
     cancelledAt: null,
     cancellationReason: null,
   });
+
+  try {
+    await sendBookingConfirmation({
+      to: parsed.data.contactEmail,
+      firstName: parsed.data.contactName.split(" ")[0] ?? parsed.data.contactName,
+      reference,
+      tourTitle: tour.title,
+      paxCount: 1,
+      totalDisplay: formatPrice(tour.basePriceMinor, tour.baseCurrency),
+    });
+  } catch (e) {
+    console.error("[booking] failed to send confirmation email:", e);
+  }
 
   redirect(`/bookings/${reference}`);
 }
