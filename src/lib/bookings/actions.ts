@@ -6,11 +6,13 @@ import { randomUUID } from "node:crypto";
 import { getTourBySlug } from "@/lib/content/tours";
 import { sendBookingConfirmation } from "@/lib/email";
 import { formatPrice } from "@/lib/format";
+import { getDepartureById } from "@/lib/departures/store";
 import { generateBookingReference } from "./reference";
 import { createBookingRecord } from "./store";
 
 const checkoutSchema = z.object({
   tourSlug: z.string().min(1, "Tour is required"),
+  departureId: z.string().optional(),
   contactName: z.string().min(2, "Please enter your full name"),
   contactEmail: z.string().email("Please enter a valid email"),
   contactPhone: z.string().min(6, "Please enter a phone number we can reach you on"),
@@ -28,6 +30,7 @@ export async function submitCheckout(
 ): Promise<CheckoutFormState> {
   const raw = {
     tourSlug: formData.get("tourSlug")?.toString() ?? "",
+    departureId: formData.get("departureId")?.toString() || undefined,
     contactName: formData.get("contactName")?.toString() ?? "",
     contactEmail: formData.get("contactEmail")?.toString() ?? "",
     contactPhone: formData.get("contactPhone")?.toString() ?? "",
@@ -49,17 +52,41 @@ export async function submitCheckout(
     return { message: "That journey is no longer available." };
   }
 
+  if (tour.kind === "fixed" && !parsed.data.departureId) {
+    return {
+      errors: { departureId: "Please choose a departure date." },
+      message: "Please fix the highlighted fields.",
+    };
+  }
+
+  let departureId: string | null = null;
+  let totalMinor = tour.basePriceMinor;
+
+  if (parsed.data.departureId) {
+    const departure = await getDepartureById(parsed.data.departureId);
+    if (!departure) {
+      return { errors: { departureId: "That departure is no longer available." }, message: "Please fix the highlighted fields." };
+    }
+    if (departure.status === "sold_out") {
+      return { errors: { departureId: "That departure is sold out." }, message: "Please fix the highlighted fields." };
+    }
+    departureId = departure.id;
+    if (departure.priceOverrideMinor != null) {
+      totalMinor = departure.priceOverrideMinor;
+    }
+  }
+
   const reference = generateBookingReference();
 
   await createBookingRecord({
     id: randomUUID(),
     reference,
-    departureId: null, // TODO: assign a real departure once the date picker UI lands
+    departureId,
     contactName: parsed.data.contactName,
     contactEmail: parsed.data.contactEmail,
     contactPhone: parsed.data.contactPhone,
     paxCount: 1,
-    totalMinor: tour.basePriceMinor,
+    totalMinor,
     currency: tour.baseCurrency,
     status: "pending_payment",
     notes: parsed.data.notes ?? null,
@@ -74,7 +101,7 @@ export async function submitCheckout(
       reference,
       tourTitle: tour.title,
       paxCount: 1,
-      totalDisplay: formatPrice(tour.basePriceMinor, tour.baseCurrency),
+      totalDisplay: formatPrice(totalMinor, tour.baseCurrency),
     });
   } catch (e) {
     console.error("[booking] failed to send confirmation email:", e);
