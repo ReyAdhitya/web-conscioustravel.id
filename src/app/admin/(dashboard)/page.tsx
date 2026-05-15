@@ -87,7 +87,7 @@ export default async function AdminDashboardPage() {
                 {bookings.map((b) => (
                   <tr key={b.id} className="border-border/40 hover:bg-background/50 border-b last:border-b-0 transition">
                     <td className="px-4 py-3 font-mono text-xs">
-                      <Link href={`/bookings/${b.reference}`} target="_blank" className="hover:text-accent transition">
+                      <Link href={`/admin/bookings/${b.id}`} className="hover:text-accent transition">
                         {b.reference}
                       </Link>
                     </td>
@@ -140,7 +140,7 @@ export default async function AdminDashboardPage() {
                 {inquiries.map((i) => (
                   <tr key={i.id} className="border-border/40 hover:bg-background/50 border-b last:border-b-0 transition">
                     <td className="px-4 py-3 font-mono text-xs">
-                      <Link href={`/inquiries/${i.reference}`} target="_blank" className="hover:text-accent transition">
+                      <Link href={`/admin/inquiries/${i.id}`} className="hover:text-accent transition">
                         {i.reference}
                       </Link>
                     </td>

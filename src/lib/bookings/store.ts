@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 import { db } from "@/lib/db/client";
 import { bookings, type Booking } from "@/lib/db/schema";
 
@@ -18,8 +18,33 @@ export async function getBookingByReference(reference: string): Promise<Booking 
   return found ?? null;
 }
 
+export async function getBookingById(id: string): Promise<Booking | null> {
+  const [found] = await db.select().from(bookings).where(eq(bookings.id, id)).limit(1);
+  return found ?? null;
+}
+
 export async function getAllBookings(limit = 50): Promise<Booking[]> {
   return db.select().from(bookings).orderBy(desc(bookings.createdAt)).limit(limit);
+}
+
+export async function updateBookingStatus(
+  id: string,
+  status: Booking["status"],
+  reason?: string,
+): Promise<Booking> {
+  const [updated] = await db
+    .update(bookings)
+    .set({
+      status,
+      updatedAt: sql`now()`,
+      ...(status === "cancelled" && {
+        cancelledAt: sql`now()`,
+        cancellationReason: reason ?? null,
+      }),
+    })
+    .where(eq(bookings.id, id))
+    .returning();
+  return updated;
 }
 
 export type BookingStats = {

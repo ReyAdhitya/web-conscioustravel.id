@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { logoutAction, requireAuth } from "@/lib/admin/auth";
+import { NavLink } from "./_components/NavLink";
 
 export default async function AdminDashboardLayout({
   children,
@@ -21,6 +22,12 @@ export default async function AdminDashboardLayout({
             <span className="text-muted-foreground text-[10px] tracking-[0.25em] uppercase">
               Admin
             </span>
+            <nav className="hidden items-center gap-4 sm:flex">
+              <NavLink href="/admin">Dashboard</NavLink>
+              <NavLink href="/admin/bookings">Bookings</NavLink>
+              <NavLink href="/admin/inquiries">Inquiries</NavLink>
+              <NavLink href="/admin/tours">Tours</NavLink>
+            </nav>
           </div>
           <div className="flex items-center gap-4 text-sm">
             <Link
