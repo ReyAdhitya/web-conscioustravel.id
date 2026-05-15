@@ -18,6 +18,26 @@ export async function getBookingByReference(reference: string): Promise<Booking 
   return found ?? null;
 }
 
+export async function updateBookingStatus(
+  id: string,
+  status: Booking["status"],
+  reason?: string,
+): Promise<Booking> {
+  const now = new Date();
+  const [updated] = await db
+    .update(bookings)
+    .set({
+      status,
+      updatedAt: now,
+      ...(status === "cancelled"
+        ? { cancelledAt: now, cancellationReason: reason ?? null }
+        : {}),
+    })
+    .where(eq(bookings.id, id))
+    .returning();
+  return updated;
+}
+
 export async function getAllBookings(limit = 50): Promise<Booking[]> {
   return db.select().from(bookings).orderBy(desc(bookings.createdAt)).limit(limit);
 }
