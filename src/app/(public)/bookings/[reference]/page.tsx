@@ -1,14 +1,47 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { getBookingByReference } from "@/lib/bookings/store";
 import { getAllTours } from "@/lib/content/tours";
 import { formatPrice } from "@/lib/format";
+import { createSnapTransaction } from "@/lib/payments/midtrans";
+import { PayButton } from "./PayButton";
 
 export const metadata: Metadata = {
   title: "Booking received",
   robots: { index: false, follow: false },
 };
+
+async function initiatePayment(bookingId: string): Promise<{ token: string }> {
+  "use server";
+  const { getBookingByReference: getById } = await import("@/lib/bookings/store");
+  const allBookings = await import("@/lib/db/client").then(({ db }) =>
+    import("@/lib/db/schema").then(({ bookings }) =>
+      import("drizzle-orm").then(({ eq }) =>
+        db.select().from(bookings).where(eq(bookings.id, bookingId)).limit(1),
+      ),
+    ),
+  );
+  const booking = allBookings[0];
+  if (!booking) throw new Error("Booking not found");
+
+  const result = await createSnapTransaction({
+    bookingId: booking.id,
+    reference: booking.reference,
+    amount: Number(booking.totalMinor),
+    currency: booking.currency,
+    customerName: booking.contactName,
+    customerEmail: booking.contactEmail,
+    customerPhone: booking.contactPhone,
+    itemName: "Conscious Travel Journey",
+  });
+  return { token: result.token };
+}
+
+const isProduction = process.env.MIDTRANS_IS_PRODUCTION === "true";
+const SNAP_URL = isProduction
+  ? "https://app.midtrans.com/snap/snap.js"
+  : "https://app.sandbox.midtrans.com/snap/snap.js";
 
 export default async function BookingConfirmationPage({
   params,
@@ -24,6 +57,10 @@ export default async function BookingConfirmationPage({
 
   const tours = await getAllTours();
   const tour = tours.find((t) => t.basePriceMinor === booking.totalMinor) ?? tours[0];
+
+  const clientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY ?? "";
+  const showPayButton =
+    booking.status === "pending_payment" && booking.currency === "IDR";
 
   return (
     <section className="bg-background px-6 py-20 sm:px-12 lg:px-20">
@@ -72,46 +109,59 @@ export default async function BookingConfirmationPage({
             <div>
               <dt className="text-xs tracking-wide text-muted-foreground">Status</dt>
               <dd className="mt-1 inline-flex items-center gap-2 rounded-full bg-accent/10 px-3 py-1 text-xs text-accent">
-                Awaiting payment
+                {booking.status === "confirmed" ? "Confirmed" : "Awaiting payment"}
               </dd>
             </div>
           </dl>
         </div>
 
-        <div className="mt-8 rounded-xl border border-dashed border-accent/40 bg-accent/5 p-8">
-          <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-accent/15 px-3 py-1 text-[10px] tracking-[0.2em] uppercase text-accent">
-            Demo mode
+        {showPayButton ? (
+          <PayButton
+            bookingId={booking.id}
+            snapUrl={SNAP_URL}
+            clientKey={clientKey}
+            initiatePayment={initiatePayment}
+            onSuccess={() => {
+              "use server";
+              redirect(`/bookings/${reference}`);
+            }}
+          />
+        ) : (
+          <div className="mt-8 rounded-xl border border-dashed border-accent/40 bg-accent/5 p-8">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-accent/15 px-3 py-1 text-[10px] tracking-[0.2em] uppercase text-accent">
+              Demo mode
+            </div>
+            <h2 className="font-serif text-xl tracking-tight text-foreground">
+              Payment instructions (placeholder)
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              This block becomes real once the business bank account, Resend (email API), and
+              Midtrans + Stripe gateways are wired. Until then the values below are demo data.
+            </p>
+            <dl className="mt-6 grid gap-3 text-sm">
+              <div className="flex justify-between border-b border-border/40 pb-2">
+                <dt className="text-muted-foreground">Bank</dt>
+                <dd className="text-foreground">BCA · Bank Central Asia <span className="text-muted-foreground">(demo)</span></dd>
+              </div>
+              <div className="flex justify-between border-b border-border/40 pb-2">
+                <dt className="text-muted-foreground">Account name</dt>
+                <dd className="text-foreground">PT Conscious Travel Indonesia <span className="text-muted-foreground">(demo)</span></dd>
+              </div>
+              <div className="flex justify-between border-b border-border/40 pb-2">
+                <dt className="text-muted-foreground">Account number</dt>
+                <dd className="font-mono text-muted-foreground italic">— pending real account —</dd>
+              </div>
+              <div className="flex justify-between">
+                <dt className="text-muted-foreground">Amount</dt>
+                <dd className="text-foreground">{formatPrice(booking.totalMinor, booking.currency)}</dd>
+              </div>
+            </dl>
+            <p className="mt-4 text-xs text-muted-foreground">
+              Reference code <span className="font-mono text-foreground">{booking.reference}</span>{" "}
+              is real and unique. The email mentioned above is not actually sent yet.
+            </p>
           </div>
-          <h2 className="font-serif text-xl tracking-tight text-foreground">
-            Payment instructions (placeholder)
-          </h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            This block becomes real once the business bank account, Resend (email API), and
-            Midtrans + Stripe gateways are wired. Until then the values below are demo data.
-          </p>
-          <dl className="mt-6 grid gap-3 text-sm">
-            <div className="flex justify-between border-b border-border/40 pb-2">
-              <dt className="text-muted-foreground">Bank</dt>
-              <dd className="text-foreground">BCA · Bank Central Asia <span className="text-muted-foreground">(demo)</span></dd>
-            </div>
-            <div className="flex justify-between border-b border-border/40 pb-2">
-              <dt className="text-muted-foreground">Account name</dt>
-              <dd className="text-foreground">PT Conscious Travel Indonesia <span className="text-muted-foreground">(demo)</span></dd>
-            </div>
-            <div className="flex justify-between border-b border-border/40 pb-2">
-              <dt className="text-muted-foreground">Account number</dt>
-              <dd className="font-mono text-muted-foreground italic">— pending real account —</dd>
-            </div>
-            <div className="flex justify-between">
-              <dt className="text-muted-foreground">Amount</dt>
-              <dd className="text-foreground">{formatPrice(booking.totalMinor, booking.currency)}</dd>
-            </div>
-          </dl>
-          <p className="mt-4 text-xs text-muted-foreground">
-            Reference code <span className="font-mono text-foreground">{booking.reference}</span>{" "}
-            is real and unique. The email mentioned above is not actually sent yet.
-          </p>
-        </div>
+        )}
 
         <div className="mt-10 flex flex-wrap gap-4 text-sm">
           <Link href="/tours" className="text-muted-foreground hover:text-foreground transition">
