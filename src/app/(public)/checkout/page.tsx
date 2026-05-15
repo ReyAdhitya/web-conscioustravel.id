@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getTourBySlug } from "@/lib/content/tours";
 import { formatPrice } from "@/lib/format";
+import { getUpcomingDeparturesByTourId } from "@/lib/departures/store";
 import { CheckoutForm } from "./CheckoutForm";
 
 export const metadata: Metadata = {
@@ -43,6 +44,8 @@ export default async function CheckoutPage({
     notFound();
   }
 
+  const departures = await getUpcomingDeparturesByTourId(tour.id);
+
   return (
     <section className="bg-background px-6 py-16 sm:px-12 lg:px-20">
       <div className="mx-auto w-full max-w-5xl">
@@ -55,7 +58,7 @@ export default async function CheckoutPage({
         </p>
 
         <div className="mt-12 grid gap-12 lg:grid-cols-[1fr_360px]">
-          <CheckoutForm tourSlug={tour.slug} />
+          <CheckoutForm tourSlug={tour.slug} tourKind={tour.kind} departures={departures} />
 
           <aside className="lg:sticky lg:top-24 lg:self-start">
             <div className="rounded-xl border border-border/60 bg-card p-6">

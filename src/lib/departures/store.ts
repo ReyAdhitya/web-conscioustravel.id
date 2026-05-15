@@ -45,3 +45,8 @@ export async function updateDeparture(
 export async function deleteDeparture(id: string): Promise<void> {
   await db.delete(departures).where(eq(departures.id, id));
 }
+
+export async function getDepartureById(id: string): Promise<Departure | null> {
+  const [found] = await db.select().from(departures).where(eq(departures.id, id)).limit(1);
+  return found ?? null;
+}
