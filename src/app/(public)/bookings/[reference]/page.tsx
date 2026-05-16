@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
+import { eq } from "drizzle-orm";
 import { getBookingByReference } from "@/lib/bookings/store";
 import { getAllTours } from "@/lib/content/tours";
+import { db } from "@/lib/db/client";
+import { bookings } from "@/lib/db/schema";
 import { formatPrice } from "@/lib/format";
 import { createSnapTransaction } from "@/lib/payments/midtrans";
 import { PayButton } from "./PayButton";
@@ -14,14 +17,11 @@ export const metadata: Metadata = {
 
 async function initiatePayment(bookingId: string): Promise<{ token: string }> {
   "use server";
-  const { getBookingByReference: getById } = await import("@/lib/bookings/store");
-  const allBookings = await import("@/lib/db/client").then(({ db }) =>
-    import("@/lib/db/schema").then(({ bookings }) =>
-      import("drizzle-orm").then(({ eq }) =>
-        db.select().from(bookings).where(eq(bookings.id, bookingId)).limit(1),
-      ),
-    ),
-  );
+  const allBookings = await db
+    .select()
+    .from(bookings)
+    .where(eq(bookings.id, bookingId))
+    .limit(1);
   const booking = allBookings[0];
   if (!booking) throw new Error("Booking not found");
 

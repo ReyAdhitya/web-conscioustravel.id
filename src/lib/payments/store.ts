@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db } from "@/lib/db/client";
-import { payments, type NewPayment, type Payment } from "@/lib/db/schema";
+import { payments, type Payment } from "@/lib/db/schema";
 
 export async function createPaymentRecord(
   data: Omit<Payment, "createdAt" | "updatedAt">,

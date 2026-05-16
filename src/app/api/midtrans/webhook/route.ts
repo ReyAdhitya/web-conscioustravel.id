@@ -24,7 +24,7 @@ export async function POST(request: Request): Promise<NextResponse> {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const { order_id, transaction_status, fraud_status, status_code, gross_amount, signature_key, payment_type, transaction_id } = body;
+  const { order_id, transaction_status, fraud_status, status_code, gross_amount, signature_key, transaction_id } = body;
 
   const valid = verifyMidtransSignature(order_id, status_code, gross_amount, signature_key);
   if (!valid) {

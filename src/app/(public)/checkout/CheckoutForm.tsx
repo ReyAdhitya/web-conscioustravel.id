@@ -23,12 +23,10 @@ function formatDateRange(startsOn: string, endsOn: string): string {
 export function CheckoutForm({
   tourSlug,
   tourKind,
-  tourCurrency,
   departures,
 }: {
   tourSlug: string;
   tourKind: "fixed" | "open";
-  tourCurrency: string;
   departures: Departure[];
 }) {
   const [state, formAction, pending] = useActionState(submitCheckout, initial);
