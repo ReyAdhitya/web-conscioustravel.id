@@ -1,7 +1,43 @@
 {
   "permissions": {
     "allow": [
-      "PowerShell(Test-Path *)"
+      "PowerShell(Test-Path *)",
+      "PowerShell(Get-ChildItem \"D:\\\\SWE Projexts\\\\web-conscioustravel.id\" -Force | Format-Table Name, @{N='Type';E={if\\($_.PSIsContainer\\){'DIR'}else{'FILE'}}}, Length -AutoSize)",
+      "PowerShell(npm install *)",
+      "PowerShell(npm run *)",
+      "Bash(git *)",
+      "WebFetch(domain:seminyak.potatohead.co)",
+      "PowerShell(npx --yes shadcn@latest init -d -y 2>&1 | Select-Object -Last 30)",
+      "Bash(npm run *)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}  size=%{size_download}\\\\n\" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"/ HTTP %{http_code}\\\\n\" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"/tours HTTP %{http_code}  size=%{size_download}\\\\n\" http://localhost:3000/tours)",
+      "Bash(curl -s -o /dev/null -w \"/tours?category=wellness HTTP %{http_code}\\\\n\" \"http://localhost:3000/tours?category=wellness\")",
+      "Bash(curl -s -o /dev/null -w \"/tours?kind=open HTTP %{http_code}\\\\n\" \"http://localhost:3000/tours?kind=open\")",
+      "Bash(curl -s -o /dev/null -w \"/tours?category=adventure HTTP %{http_code}\\\\n\" \"http://localhost:3000/tours?category=adventure\")",
+      "Bash(curl -s -o /dev/null -w \"ubud: %{http_code}\\\\n\" http://localhost:3000/tours/ubud-seven-day-wellness-retreat)",
+      "Bash(curl -s -o /dev/null -w \"komodo: %{http_code}\\\\n\" http://localhost:3000/tours/komodo-flores-conscious-sail)",
+      "Bash(curl -s -o /dev/null -w \"slow-living: %{http_code}\\\\n\" http://localhost:3000/tours/bali-slow-living-stay)",
+      "Bash(curl -s -o /dev/null -w \"404: %{http_code}\\\\n\" http://localhost:3000/tours/this-does-not-exist)",
+      "Bash(curl -s -o /dev/null -w \"/checkout \\(no tour\\): %{http_code}\\\\n\" http://localhost:3000/checkout)",
+      "Bash(curl -s -o /dev/null -w \"/checkout?tour=ubud...: %{http_code}\\\\n\" \"http://localhost:3000/checkout?tour=ubud-seven-day-wellness-retreat\")",
+      "Bash(curl -s -o /dev/null -w \"/checkout?tour=fake: %{http_code}\\\\n\" \"http://localhost:3000/checkout?tour=fake-slug\")",
+      "Bash(curl -s -o /dev/null -w \"/bookings/CT-2026-FAKE: %{http_code}\\\\n\" \"http://localhost:3000/bookings/CT-2026-FAKE\")",
+      "Bash(curl -s -o /dev/null -w \"/ %{http_code}\\\\n/tours %{http_code}\\\\n/tours/ubud %{http_code}\\\\n\" http://localhost:3000/ http://localhost:3000/tours http://localhost:3000/tours/ubud-seven-day-wellness-retreat)",
+      "Bash(curl -s -o /dev/null -w \"ubud-detail: %{http_code}\\\\n\" http://localhost:3000/tours/ubud-seven-day-wellness-retreat)",
+      "Bash(curl -s -o /dev/null -w \"/inquiry: %{http_code}\\\\n\" http://localhost:3000/inquiry)",
+      "Bash(curl -s -o /dev/null -w \"/inquiries/CT-INQ-FAKE: %{http_code}\\\\n\" \"http://localhost:3000/inquiries/CT-INQ-FAKE\")",
+      "PowerShell(npx tsx scripts/check-db.mjs 2>&1)",
+      "PowerShell(npx tsx scripts/test-bookings.mjs 2>&1 | Select-Object -Last 25)",
+      "Bash(curl *)",
+      "PowerShell(npx tsx scripts/check-resend.mjs 2>&1)",
+      "Bash(npm install *)",
+      "Bash(node -e ' *)",
+      "Bash(dir __tests__)",
+      "Bash(dir \".claude\\\\worktrees\\\\agent-ab270f638755ed527\\\\__tests__\")",
+      "Bash(npx vitest *)",
+      "Bash(vercel env *)",
+      "Bash(npx tsc *)"
     ]
   }
 }

@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { TourCard } from "@/components/tour/TourCard";
 import { getFeaturedTours } from "@/lib/content/tours";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Sustainable & Mindful Journeys in Indonesia",
   description:
