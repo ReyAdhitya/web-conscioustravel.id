@@ -1,5 +1,7 @@
 # Conscious Travel Indonesia
 
+> **Work in progress.** The platform is live but actively being developed. Features, design, and content will continue to change.
+
 **Live site: https://web-conscioustravelid.vercel.app**
 
 A tour booking platform for sustainable and mindful travel across the Indonesian archipelago. Built for travelers who want to move slowly, pay people fairly, and leave places more whole than they found them.
