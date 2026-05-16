@@ -38,10 +38,10 @@ export function TourCard({ tour }: { tour: Tour }) {
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_20%,rgba(255,255,255,0.15),transparent_60%)]" />
         )}
         <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/40 to-transparent" />
-        <div className="absolute top-4 left-4 inline-flex items-center gap-2 rounded-full bg-background/90 px-3 py-1 text-[10px] tracking-[0.2em] uppercase">
+        <div className="absolute top-4 left-4 inline-flex items-center gap-2 rounded-full bg-foreground/95 px-3 py-1 text-[10px] font-medium tracking-[0.2em] text-background uppercase">
           {categoryLabel[tour.category]}
           {tour.kind === "open" && (
-            <span className="text-muted-foreground">· flexible dates</span>
+            <span className="opacity-70">· flexible dates</span>
           )}
         </div>
       </div>
