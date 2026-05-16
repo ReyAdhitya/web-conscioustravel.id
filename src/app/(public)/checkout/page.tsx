@@ -58,7 +58,7 @@ export default async function CheckoutPage({
         </p>
 
         <div className="mt-12 grid gap-12 lg:grid-cols-[1fr_360px]">
-          <CheckoutForm tourSlug={tour.slug} tourKind={tour.kind} departures={departures} />
+          <CheckoutForm tourSlug={tour.slug} tourKind={tour.kind} tourCurrency={tour.baseCurrency} departures={departures} />
 
           <aside className="lg:sticky lg:top-24 lg:self-start">
             <div className="rounded-xl border border-border/60 bg-card p-6">
