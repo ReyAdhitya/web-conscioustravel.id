@@ -121,7 +121,7 @@ export default async function BookingConfirmationPage({
             snapUrl={SNAP_URL}
             clientKey={clientKey}
             initiatePayment={initiatePayment}
-            onSuccess={() => {
+            onSuccess={async () => {
               "use server";
               redirect(`/bookings/${reference}`);
             }}

@@ -24,7 +24,7 @@ type Props = {
   snapUrl: string;
   clientKey: string;
   initiatePayment: (bookingId: string) => Promise<{ token: string }>;
-  onSuccess: () => void;
+  onSuccess: () => Promise<void>;
 };
 
 export function PayButton({ bookingId, snapUrl, clientKey, initiatePayment, onSuccess }: Props) {
