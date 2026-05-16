@@ -76,9 +76,9 @@ export default async function TourDetailPage({
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/20 to-black/10" />
         <div className="relative mx-auto w-full max-w-7xl text-white">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/95 px-3 py-1 text-[10px] tracking-[0.2em] uppercase text-foreground">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/95 px-3 py-1 text-[10px] font-medium tracking-[0.2em] text-neutral-900 uppercase">
             {categoryLabel[tour.category]}
-            {tour.kind === "open" && <span className="text-muted-foreground">· flexible dates</span>}
+            {tour.kind === "open" && <span className="text-neutral-600">· flexible dates</span>}
           </div>
           <h1 className="font-serif text-4xl leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
             {tour.title}
