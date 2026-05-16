@@ -2,7 +2,7 @@
 
 A tour booking platform for sustainable and mindful travel across the Indonesian archipelago. Built for travelers who want to move slowly, pay people fairly, and leave places more whole than they found them.
 
-The platform connects travelers with curated, low-impact journeys run by operators we know personally — yoga teachers, sailing crews, cooking grandmothers, tracking guides — people who have been doing this work well long before tourism was a category.
+The platform connects travelers with curated, low-impact journeys run by operators we know personally, yoga teachers, sailing crews, cooking grandmothers, tracking guides, people who have been doing this work well long before tourism was a category.
 
 ## What it does
 
