@@ -1,5 +1,6 @@
 "use server";
 
+import { createHmac } from "node:crypto";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -16,6 +17,11 @@ function adminPassword(): string {
   return p;
 }
 
+function adminToken(): string {
+  const password = adminPassword();
+  return createHmac("sha256", password).update(password).digest("hex");
+}
+
 export type LoginState = { error?: string };
 
 export async function loginAction(_prev: LoginState, formData: FormData): Promise<LoginState> {
@@ -24,7 +30,7 @@ export async function loginAction(_prev: LoginState, formData: FormData): Promis
     return { error: "Wrong password." };
   }
   const store = await cookies();
-  store.set(COOKIE_NAME, password, {
+  store.set(COOKIE_NAME, adminToken(), {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
@@ -44,7 +50,7 @@ export async function isAuthenticated(): Promise<boolean> {
   const store = await cookies();
   const cookie = store.get(COOKIE_NAME);
   if (!cookie) return false;
-  return cookie.value === adminPassword();
+  return cookie.value === adminToken();
 }
 
 export async function requireAuth(): Promise<void> {
