@@ -74,15 +74,6 @@ export default async function HomePage() {
               <TourCard key={tour.id} tour={tour} />
             ))}
           </div>
-          {featured.length > 0 && (
-            <div className="mt-14 text-center">
-              <Button
-                render={<Link href="/tours">Explore all journeys</Link>}
-                variant="ghost"
-                className="h-12 rounded-full px-8 text-sm tracking-wide"
-              />
-            </div>
-          )}
         </div>
       </section>
     </>
