@@ -22,7 +22,7 @@ export async function getFeaturedTours(): Promise<Tour[]> {
     .from(tours)
     .where(isNull(tours.archivedAt))
     .orderBy(desc(tours.createdAt))
-    .limit(6);
+    .limit(3);
 }
 
 export async function getTourBySlug(slug: string): Promise<Tour | null> {
