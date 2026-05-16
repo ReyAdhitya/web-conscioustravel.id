@@ -8,6 +8,12 @@ export const metadata: Metadata = {
   title: "Journeys",
   description:
     "Sustainable, wellness-focused tours and slow-travel stays across Indonesia. Filter by category to find the right journey.",
+  openGraph: {
+    title: "Journeys — Conscious Travel Indonesia",
+    description:
+      "Sustainable, wellness-focused tours and slow-travel stays across Indonesia. Filter by category to find the right journey.",
+    type: "website",
+  },
 };
 
 const categoryFilters: { value: Tour["category"]; label: string }[] = [

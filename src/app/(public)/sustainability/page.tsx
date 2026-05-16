@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   title: "Sustainability",
   description:
     "Five commitments that shape every Conscious Travel journey — from carbon and plastic to fair wages, local ownership, and regenerative impact projects.",
+  openGraph: {
+    title: "Sustainability — Conscious Travel Indonesia",
+    description:
+      "Five commitments that shape every Conscious Travel journey — from carbon and plastic to fair wages, local ownership, and regenerative impact projects.",
+    type: "website",
+  },
 };
 
 const commitments = [

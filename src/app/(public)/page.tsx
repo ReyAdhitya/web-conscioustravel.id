@@ -1,7 +1,20 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { TourCard } from "@/components/tour/TourCard";
 import { getFeaturedTours } from "@/lib/content/tours";
+
+export const metadata: Metadata = {
+  title: "Sustainable & Mindful Journeys in Indonesia",
+  description:
+    "Curated low-impact journeys across the Indonesian archipelago — wellness retreats, community-led stays, and slow travel with certified local operators.",
+  openGraph: {
+    title: "Sustainable & Mindful Journeys in Indonesia",
+    description:
+      "Curated low-impact journeys across the Indonesian archipelago — wellness retreats, community-led stays, and slow travel with certified local operators.",
+    type: "website",
+  },
+};
 
 export default async function HomePage() {
   const featured = await getFeaturedTours();

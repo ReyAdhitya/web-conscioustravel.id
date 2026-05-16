@@ -5,6 +5,12 @@ export const metadata: Metadata = {
   title: "Plan a custom journey",
   description:
     "Tell us how you want to travel — dates, group, interests, budget — and we'll craft a custom Indonesian itinerary for you.",
+  openGraph: {
+    title: "Plan a custom journey — Conscious Travel Indonesia",
+    description:
+      "Tell us how you want to travel — dates, group, interests, budget — and we'll craft a custom Indonesian itinerary for you.",
+    type: "website",
+  },
 };
 
 export default function InquiryPage() {
