@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { verifyMidtransSignature } from "@/lib/payments/midtrans";
+import { resolveBookingStatus, resolvePaymentStatus } from "@/lib/payments/status";
 import { createPaymentRecord } from "@/lib/payments/store";
 import { getBookingByReference, updateBookingStatus } from "@/lib/bookings/store";
-import type { Booking } from "@/lib/db/schema";
 
 type MidtransWebhookBody = {
   order_id: string;
@@ -15,32 +15,6 @@ type MidtransWebhookBody = {
   payment_type: string;
   transaction_id: string;
 };
-
-function resolveBookingStatus(
-  transactionStatus: string,
-  fraudStatus: string,
-): Booking["status"] | null {
-  if (
-    (transactionStatus === "settlement" || transactionStatus === "capture") &&
-    fraudStatus === "accept"
-  ) {
-    return "confirmed";
-  }
-  if (transactionStatus === "cancel" || transactionStatus === "expire") {
-    return "cancelled";
-  }
-  if (transactionStatus === "pending") {
-    return "pending_payment";
-  }
-  return null;
-}
-
-function resolvePaymentStatus(transactionStatus: string) {
-  if (transactionStatus === "settlement" || transactionStatus === "capture") return "succeeded";
-  if (transactionStatus === "pending") return "pending";
-  if (transactionStatus === "cancel" || transactionStatus === "expire") return "failed";
-  return "failed";
-}
 
 export async function POST(request: Request): Promise<NextResponse> {
   let body: MidtransWebhookBody;
