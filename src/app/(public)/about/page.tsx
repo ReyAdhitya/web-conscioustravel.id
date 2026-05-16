@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   title: "About",
   description:
     "Conscious Travel was started in Ubud out of frustration with how Indonesia is sold to mass tourism. We work small, slow, and local — and we'd like you to as well.",
+  openGraph: {
+    title: "About Conscious Travel Indonesia",
+    description:
+      "Conscious Travel was started in Ubud out of frustration with how Indonesia is sold to mass tourism. We work small, slow, and local — and we'd like you to as well.",
+    type: "website",
+  },
 };
 
 const principles = [
