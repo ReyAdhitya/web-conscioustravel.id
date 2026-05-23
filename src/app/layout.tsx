@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Manrope, Fraunces, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { IntroOverlay } from "@/components/loaders/IntroOverlay";
 import "./globals.css";
 
@@ -44,6 +46,8 @@ export default function RootLayout({
       <body className="bg-background text-foreground flex min-h-full flex-col">
         <IntroOverlay />
         {children}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

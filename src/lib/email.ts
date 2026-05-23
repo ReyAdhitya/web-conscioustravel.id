@@ -18,6 +18,23 @@ if (!usingGmail && !RESEND_API_KEY) {
   );
 }
 
+// Loud one-time warning so the "friends can't receive emails" trap doesn't
+// silently bite again. Resend's sandbox sender only delivers to the account
+// owner's verified address.
+if (!usingGmail && RESEND_API_KEY) {
+  const fromHasVerifiedDomain =
+    typeof process.env.EMAIL_FROM === "string" &&
+    !process.env.EMAIL_FROM.includes("onboarding@resend.dev");
+  if (!fromHasVerifiedDomain) {
+    console.warn(
+      "\n[email] ⚠️  Using Resend's sandbox sender (`onboarding@resend.dev`).",
+      "\n[email]    Emails will ONLY reach the address tied to your Resend account.",
+      "\n[email]    To send to arbitrary recipients: set GMAIL_USER + GMAIL_APP_PASSWORD",
+      "\n[email]    in .env.local (free) OR verify a domain at https://resend.com/domains.\n",
+    );
+  }
+}
+
 let gmailTransport: Transporter | null = null;
 let resendClient: Resend | null = null;
 

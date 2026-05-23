@@ -4,8 +4,15 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { Maximize2, ArrowUpRight } from "lucide-react";
 import { getAllTours, getTourBySlug } from "@/lib/content/tours";
+import { getUpcomingDeparturesByTourId } from "@/lib/departures/store";
 import { formatPrice } from "@/lib/format";
 import type { Tour } from "@/lib/db/schema";
+
+const departureFmt = new Intl.DateTimeFormat("en-GB", {
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+});
 
 const categoryLabel: Record<Tour["category"], string> = {
   wellness: "Wellness",
@@ -68,6 +75,9 @@ export default async function TourDetailPage({
   if (!tour) {
     notFound();
   }
+
+  const departures = await getUpcomingDeparturesByTourId(tour.id);
+  const isFixedWithoutDepartures = tour.kind === "fixed" && departures.length === 0;
 
   const validHero = tour.heroImageUrl && isValidUrl(tour.heroImageUrl) ? tour.heroImageUrl : null;
   const gallery = (tour.galleryImageUrls ?? []).filter(isValidUrl);
@@ -229,16 +239,58 @@ export default async function TourDetailPage({
           <div className="border-border my-6 border-t" />
 
           <div className="flex flex-col gap-3">
-            <label className="text-muted-foreground flex flex-col gap-1.5 text-xs tracking-wide">
-              {tour.kind === "fixed" ? "Choose departure" : "Preferred start date"}
-              <select
-                className="border-border bg-background text-foreground rounded-lg border px-3 py-2.5 text-sm"
-                defaultValue=""
-                disabled
-              >
-                <option value="">departures load when DB is wired</option>
-              </select>
-            </label>
+            {tour.kind === "fixed" ? (
+              departures.length > 0 ? (
+                <div className="flex flex-col gap-1.5">
+                  <span className="text-muted-foreground text-xs tracking-wide">
+                    Upcoming departures
+                  </span>
+                  <ul className="border-border divide-border/60 divide-y rounded-lg border bg-background">
+                    {departures.slice(0, 4).map((dep) => {
+                      const spotsLeft = dep.capacity - dep.bookedCount;
+                      const soldOut = dep.status === "sold_out" || spotsLeft <= 0;
+                      return (
+                        <li
+                          key={dep.id}
+                          className="flex items-center justify-between px-3 py-2.5 text-sm"
+                        >
+                          <span className="text-foreground">
+                            {departureFmt.format(new Date(dep.startsOn + "T00:00:00"))}
+                          </span>
+                          <span
+                            className={
+                              soldOut
+                                ? "text-muted-foreground text-xs"
+                                : "text-accent text-xs font-medium"
+                            }
+                          >
+                            {soldOut
+                              ? "Sold out"
+                              : `${spotsLeft} ${spotsLeft === 1 ? "spot" : "spots"}`}
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              ) : (
+                <div className="border-border bg-background flex flex-col gap-1.5 rounded-lg border border-dashed p-4 text-sm">
+                  <span className="text-foreground font-medium">No scheduled departures yet</span>
+                  <span className="text-muted-foreground text-xs leading-[1.5]">
+                    Send a quick inquiry and we&apos;ll come back with the next available group.
+                  </span>
+                </div>
+              )
+            ) : (
+              <label className="text-muted-foreground flex flex-col gap-1.5 text-xs tracking-wide">
+                Preferred start date
+                <input
+                  type="date"
+                  className="border-border bg-background text-foreground rounded-lg border px-3 py-2.5 text-sm"
+                />
+              </label>
+            )}
+
             <label className="text-muted-foreground flex flex-col gap-1.5 text-xs tracking-wide">
               Travelers
               <input
@@ -252,14 +304,18 @@ export default async function TourDetailPage({
           </div>
 
           <Link
-            href={`/checkout?tour=${tour.slug}`}
+            href={
+              isFixedWithoutDepartures ? `/inquiry?tour=${tour.slug}` : `/checkout?tour=${tour.slug}`
+            }
             className="bg-accent-deep text-background hover:bg-accent mt-6 flex w-full items-center justify-center gap-2 rounded-full px-5 py-4 text-[15px] font-medium transition-colors"
           >
-            Continue to booking
+            {isFixedWithoutDepartures ? "Request custom dates" : "Continue to booking"}
             <ArrowUpRight className="size-3.5" />
           </Link>
           <p className="text-muted-foreground mt-3 text-center text-[11px]">
-            You won&apos;t be charged yet
+            {isFixedWithoutDepartures
+              ? "We respond within two business days"
+              : "You won't be charged yet"}
           </p>
 
           <div className="border-border text-ink-soft mt-6 flex flex-col gap-2 border-t pt-5 text-xs">

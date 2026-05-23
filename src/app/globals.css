@@ -139,6 +139,32 @@
   strong, b {
     font-weight: 700;
   }
+  /* Keyboard-only focus ring — mouse users won't see it. */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+}
+
+/* Skip-to-content link — invisible until focused via Tab key. */
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 16px;
+  z-index: 9999;
+  background: var(--accent-deep);
+  color: var(--background);
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: top 0.2s ease-out;
+}
+.skip-link:focus {
+  top: 16px;
+  outline: 2px solid var(--background);
+  outline-offset: 2px;
 }
 
 /* Soft radial hero background used on landing-style pages. */

@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 
 const navItems = [
-  { href: "/", label: "Home" },
   { href: "/tours", label: "Journeys" },
-  { href: "/inquiry", label: "Custom journey" },
+  { href: "/stays", label: "Stays" },
+  { href: "/inquiry", label: "Custom" },
   { href: "/sustainability", label: "Journal" },
   { href: "/about", label: "About" },
 ];
@@ -49,7 +49,7 @@ export function Header() {
         <div className="mx-auto flex w-full max-w-[1280px] items-center justify-between gap-3 px-5 py-3 md:max-w-none md:gap-6 md:py-2.5 md:pr-2 md:pl-5">
           <Link
             href="/"
-            className="inline-flex items-center"
+            className="inline-flex shrink-0 items-center"
             onClick={() => setOpen(false)}
             aria-label="conscioustravel.id home"
           >
@@ -59,13 +59,17 @@ export function Header() {
               width={1560}
               height={330}
               priority
-              className="h-8 w-auto sm:h-9"
+              className="h-8 w-auto shrink-0 md:h-7 lg:h-9"
             />
           </Link>
 
-          <nav className="text-ink-soft hidden items-center gap-7 text-[13px] md:flex">
+          <nav className="text-ink-soft hidden items-center gap-5 text-[13px] md:flex lg:gap-7">
             {navItems.map((item) => (
-              <Link key={item.href} href={item.href} className="hover:text-accent transition-colors">
+              <Link
+                key={item.href}
+                href={item.href}
+                className="hover:text-accent whitespace-nowrap transition-colors"
+              >
                 {item.label}
               </Link>
             ))}
@@ -73,9 +77,9 @@ export function Header() {
 
           <Link
             href="/inquiry"
-            className="bg-accent-deep text-background hover:bg-accent hidden rounded-full px-4 py-2 text-[13px] font-medium transition-colors md:inline-flex"
+            className="bg-accent-deep text-background hover:bg-accent hidden shrink-0 rounded-full px-4 py-2 text-[13px] font-medium whitespace-nowrap transition-colors md:inline-flex"
           >
-            Book a stay
+            Book
           </Link>
 
           <button
@@ -108,7 +112,7 @@ export function Header() {
               onClick={() => setOpen(false)}
               className="bg-accent-deep text-background mt-8 inline-flex justify-center rounded-full px-6 py-4 text-base font-medium"
             >
-              Book a stay
+              Book
             </Link>
           </nav>
         </div>

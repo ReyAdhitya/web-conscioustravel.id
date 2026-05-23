@@ -10,10 +10,15 @@ export default function PublicLayout({
 }>) {
   return (
     <>
+      <a href="#main-content" className="skip-link">
+        Skip to content
+      </a>
       <SmoothScroll />
       <MagneticCursor />
       <Header />
-      <main className="flex flex-1 flex-col pt-16 md:pt-24">{children}</main>
+      <main id="main-content" className="flex flex-1 flex-col pt-16 md:pt-24">
+        {children}
+      </main>
       <Footer />
     </>
   );

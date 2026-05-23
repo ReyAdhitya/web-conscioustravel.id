@@ -14,7 +14,7 @@ export default function NotFound() {
   return (
     <>
       <Header />
-      <main className="bg-background flex flex-1 items-center px-6 py-24 sm:px-12 sm:py-32 lg:px-20">
+      <main className="bg-background flex flex-1 items-center px-6 pt-32 pb-24 sm:px-8 sm:pt-40 sm:pb-32">
         <div className="mx-auto w-full max-w-3xl text-center">
           <p className="text-muted-foreground mb-6 text-xs tracking-[0.25em] uppercase">
             Lost the trail · 404

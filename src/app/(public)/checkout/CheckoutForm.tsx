@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
+import { AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { submitCheckout, type CheckoutFormState } from "@/lib/bookings/actions";
 import { formatPrice } from "@/lib/format";
@@ -31,12 +32,69 @@ export function CheckoutForm({
 }) {
   const [state, formAction, pending] = useActionState(submitCheckout, initial);
   const [selectedDepartureId, setSelectedDepartureId] = useState<string>("");
+  const formRef = useRef<HTMLFormElement>(null);
 
   const isFixed = tourKind === "fixed" && departures.length > 0;
+  const isFixedButEmpty = tourKind === "fixed" && departures.length === 0;
+  const hasErrors = Boolean(state.errors && Object.keys(state.errors).length > 0);
+
+  // After a failed submission, scroll the banner into view and focus the first
+  // invalid field so users immediately see what to fix.
+  useEffect(() => {
+    if (!hasErrors || !formRef.current) return;
+    const firstErrorKey = state.errors && Object.keys(state.errors)[0];
+    if (!firstErrorKey) return;
+    const el = formRef.current.querySelector<HTMLElement>(`[name="${firstErrorKey}"]`);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+      el.focus({ preventScroll: true });
+    }
+  }, [state, hasErrors]);
 
   return (
-    <form action={formAction} className="flex flex-col gap-6">
+    <form ref={formRef} action={formAction} className="flex flex-col gap-6">
       <input type="hidden" name="tourSlug" value={tourSlug} />
+
+      {state.message && (
+        <div
+          role="alert"
+          className="border-destructive/40 bg-destructive/10 text-destructive flex items-start gap-3 rounded-xl border-2 px-4 py-3.5 text-sm"
+        >
+          <AlertCircle className="mt-0.5 size-5 shrink-0" />
+          <div>
+            <p className="font-medium">{state.message}</p>
+            {hasErrors && (
+              <ul className="mt-1.5 list-inside list-disc text-[13px] opacity-90">
+                {Object.entries(state.errors ?? {}).map(([key, msg]) => (
+                  <li key={key}>{msg}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      )}
+
+      {isFixedButEmpty && (
+        <div
+          role="alert"
+          className="border-border bg-card flex flex-col gap-2 rounded-xl border-2 border-dashed px-5 py-5"
+        >
+          <p className="font-serif text-foreground text-lg tracking-[-0.005em]">
+            No scheduled departures yet.
+          </p>
+          <p className="text-ink-soft text-sm leading-[1.6]">
+            This journey runs on fixed dates and none are currently published. Send a quick
+            inquiry and we&apos;ll come back with the next available group within two business
+            days.
+          </p>
+          <a
+            href={`/inquiry?tour=${tourSlug}`}
+            className="bg-accent-deep text-background hover:bg-accent mt-2 inline-flex h-11 w-fit items-center rounded-full px-6 text-sm font-medium transition-colors"
+          >
+            Request custom dates
+          </a>
+        </div>
+      )}
 
       {isFixed && (
         <fieldset className="flex flex-col gap-3">
@@ -179,19 +237,18 @@ export function CheckoutForm({
         />
       </fieldset>
 
-      {state.message && (
-        <p className="rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
-          {state.message}
-        </p>
-      )}
-
       <Button
         type="submit"
-        disabled={pending}
+        disabled={pending || isFixedButEmpty}
         className="mt-4 h-12 self-start rounded-full px-8 text-sm tracking-wide"
       >
         {pending ? "Submitting…" : "Confirm booking"}
       </Button>
+      {isFixedButEmpty && (
+        <p className="text-muted-foreground -mt-1 text-[12px]">
+          Booking is disabled until a departure is scheduled. Use the inquiry link above.
+        </p>
+      )}
 
       <p className="text-[11px] text-muted-foreground">
         By submitting you agree to our booking terms. You won&apos;t be charged yet. Payment
@@ -218,20 +275,31 @@ function Field({
 }) {
   return (
     <label htmlFor={name} className="flex flex-col gap-1.5">
-      <span className="text-xs tracking-wide text-muted-foreground">{label}</span>
+      <span
+        className={`text-xs tracking-wide ${error ? "text-destructive font-medium" : "text-muted-foreground"}`}
+      >
+        {label}
+        {required && <span aria-hidden> *</span>}
+      </span>
       <input
         id={name}
         name={name}
         type={type}
         required={required}
         autoComplete={autoComplete}
-        className={`rounded-lg border bg-background px-3 py-2 text-sm text-foreground focus:outline-none ${
+        aria-invalid={error ? "true" : undefined}
+        aria-describedby={error ? `${name}-error` : undefined}
+        className={`rounded-lg bg-background px-3 py-2.5 text-sm text-foreground focus:outline-none ${
           error
-            ? "border-destructive focus:border-destructive"
-            : "border-border focus:border-accent"
+            ? "border-2 border-destructive bg-destructive/5 focus:border-destructive"
+            : "border border-border focus:border-accent"
         }`}
       />
-      {error && <span className="text-xs text-destructive">{error}</span>}
+      {error && (
+        <span id={`${name}-error`} className="text-xs font-medium text-destructive">
+          {error}
+        </span>
+      )}
     </label>
   );
 }

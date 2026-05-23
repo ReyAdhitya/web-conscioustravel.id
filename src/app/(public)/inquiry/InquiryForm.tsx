@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useRef } from "react";
+import { AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { submitInquiry, type InquiryFormState } from "@/lib/inquiries/actions";
 
@@ -31,9 +32,40 @@ const destinationOptions = [
 
 export function InquiryForm() {
   const [state, formAction, pending] = useActionState(submitInquiry, initial);
+  const formRef = useRef<HTMLFormElement>(null);
+  const hasErrors = Boolean(state.errors && Object.keys(state.errors).length > 0);
+
+  useEffect(() => {
+    if (!hasErrors || !formRef.current) return;
+    const firstErrorKey = state.errors && Object.keys(state.errors)[0];
+    if (!firstErrorKey) return;
+    const el = formRef.current.querySelector<HTMLElement>(`[name="${firstErrorKey}"]`);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+      el.focus({ preventScroll: true });
+    }
+  }, [state, hasErrors]);
 
   return (
-    <form action={formAction} className="flex flex-col gap-12">
+    <form ref={formRef} action={formAction} className="flex flex-col gap-12">
+      {state.message && (
+        <div
+          role="alert"
+          className="border-destructive/40 bg-destructive/10 text-destructive flex items-start gap-3 rounded-xl border-2 px-4 py-3.5 text-sm"
+        >
+          <AlertCircle className="mt-0.5 size-5 shrink-0" />
+          <div>
+            <p className="font-medium">{state.message}</p>
+            {hasErrors && (
+              <ul className="mt-1.5 list-inside list-disc text-[13px] opacity-90">
+                {Object.entries(state.errors ?? {}).map(([key, msg]) => (
+                  <li key={key}>{msg}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      )}
       <Section title="About you">
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Full name" name="contactName" required error={state.errors?.contactName} autoComplete="name" />
@@ -103,12 +135,6 @@ export function InquiryForm() {
         </label>
       </Section>
 
-      {state.message && (
-        <p className="rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
-          {state.message}
-        </p>
-      )}
-
       <div className="flex flex-col gap-3">
         <Button
           type="submit"
@@ -172,7 +198,12 @@ function Field({
 }) {
   return (
     <label htmlFor={name} className="flex flex-col gap-1.5">
-      <span className="text-xs tracking-wide text-muted-foreground">{label}</span>
+      <span
+        className={`text-xs tracking-wide ${error ? "text-destructive font-medium" : "text-muted-foreground"}`}
+      >
+        {label}
+        {required && <span aria-hidden> *</span>}
+      </span>
       <input
         id={name}
         name={name}
@@ -184,9 +215,19 @@ function Field({
         min={min}
         max={max}
         step={step}
-        className={`rounded-lg border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none ${error ? "border-destructive focus:border-destructive" : "border-border focus:border-accent"}`}
+        aria-invalid={error ? "true" : undefined}
+        aria-describedby={error ? `${name}-error` : undefined}
+        className={`rounded-lg bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none ${
+          error
+            ? "border-2 border-destructive bg-destructive/5 focus:border-destructive"
+            : "border border-border focus:border-accent"
+        }`}
       />
-      {error && <span className="text-xs text-destructive">{error}</span>}
+      {error && (
+        <span id={`${name}-error`} className="text-xs font-medium text-destructive">
+          {error}
+        </span>
+      )}
     </label>
   );
 }

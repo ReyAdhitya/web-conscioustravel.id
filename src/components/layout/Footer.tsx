@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { NewsletterForm } from "./NewsletterForm";
 
 const generalLinks = [
   { href: "/inquiry", label: "Get in touch ↗" },
@@ -42,27 +42,7 @@ export function Footer() {
             </span>
           </h2>
           <div className="min-w-0">
-            <p className="text-ink-soft mb-3.5 text-sm">
-              Letters from the road, every other Sunday.
-            </p>
-            <form
-              className="bg-card flex items-center rounded-full py-2 pr-2 pl-[22px]"
-              action="#"
-            >
-              <input
-                type="email"
-                placeholder="Your email address"
-                className="text-foreground placeholder:text-muted-foreground flex-1 bg-transparent py-3 text-sm outline-none"
-                aria-label="Email address"
-              />
-              <button
-                type="submit"
-                aria-label="Subscribe"
-                className="bg-accent-deep text-background grid size-[42px] place-items-center rounded-full transition hover:bg-accent"
-              >
-                <ArrowRight className="size-4" />
-              </button>
-            </form>
+            <NewsletterForm />
           </div>
         </div>
 

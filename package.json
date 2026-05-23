@@ -27,6 +27,8 @@
     "@react-three/postprocessing": "^3.0.4",
     "@react-three/rapier": "^2.2.0",
     "@theatre/core": "^0.7.2",
+    "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.45.2",
