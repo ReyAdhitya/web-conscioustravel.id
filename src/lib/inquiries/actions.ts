@@ -103,7 +103,13 @@ export async function submitInquiry(
       reference,
     });
   } catch (e) {
-    console.error("[inquiry] failed to send confirmation email:", e);
+    // The inquiry is already saved to the DB, so we redirect either way —
+    // but log a loud warning so the team notices delivery failures.
+    console.error(
+      `[inquiry] CONFIRMATION EMAIL FAILED for ${reference} → ${data.contactEmail}.`,
+      "Check your Resend domain verification status: https://resend.com/domains",
+      e,
+    );
   }
 
   redirect(`/inquiries/${reference}`);

@@ -4,11 +4,11 @@ import { InquiryForm } from "./InquiryForm";
 export const metadata: Metadata = {
   title: "Plan a custom journey",
   description:
-    "Tell us how you want to travel — dates, group, interests, budget — and we'll craft a custom Indonesian itinerary for you.",
+    "Tell us how you want to travel: dates, group, interests, budget. We'll craft a custom Indonesian itinerary for you.",
   openGraph: {
-    title: "Plan a custom journey — Conscious Travel Indonesia",
+    title: "Plan a custom journey · Conscious Travel Indonesia",
     description:
-      "Tell us how you want to travel — dates, group, interests, budget — and we'll craft a custom Indonesian itinerary for you.",
+      "Tell us how you want to travel: dates, group, interests, budget. We'll craft a custom Indonesian itinerary for you.",
     type: "website",
   },
 };
@@ -26,7 +26,7 @@ export default function InquiryPage() {
           </h1>
           <p className="text-muted-foreground mt-6 max-w-2xl text-base leading-relaxed sm:text-lg">
             We design custom journeys around how you actually want to spend your time. Send us the
-            shape of your trip — dates, group, interests, rough budget — and we&apos;ll come back
+            shape of your trip: dates, group, interests, rough budget. We&apos;ll come back
             within two business days with a curated proposal.
           </p>
         </div>

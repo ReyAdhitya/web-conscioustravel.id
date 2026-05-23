@@ -1,14 +1,73 @@
 import { Resend } from "resend";
+import nodemailer, { type Transporter } from "nodemailer";
 
-const apiKey = process.env.RESEND_API_KEY;
-if (!apiKey) {
-  throw new Error("RESEND_API_KEY is not set. Add it to .env.local.");
+// ─── Transport selection ───────────────────────────────────────────────
+// Free path: set GMAIL_USER + GMAIL_APP_PASSWORD → uses Nodemailer over Gmail SMTP.
+// Production path: set RESEND_API_KEY (with a verified domain) → uses Resend.
+// If both are set, Gmail wins (free first).
+
+const GMAIL_USER = process.env.GMAIL_USER;
+const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD;
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+
+const usingGmail = Boolean(GMAIL_USER && GMAIL_APP_PASSWORD);
+
+if (!usingGmail && !RESEND_API_KEY) {
+  throw new Error(
+    "No email transport configured. Set GMAIL_USER + GMAIL_APP_PASSWORD (free) OR RESEND_API_KEY in .env.local.",
+  );
 }
 
-const resend = new Resend(apiKey);
+let gmailTransport: Transporter | null = null;
+let resendClient: Resend | null = null;
 
-const FROM = "Conscious Travel <onboarding@resend.dev>";
-const REPLY_TO = "hello@conscioustravel.id";
+function getGmail(): Transporter {
+  if (!gmailTransport) {
+    gmailTransport = nodemailer.createTransport({
+      service: "gmail",
+      auth: { user: GMAIL_USER!, pass: GMAIL_APP_PASSWORD! },
+    });
+  }
+  return gmailTransport;
+}
+
+function getResend(): Resend {
+  if (!resendClient) resendClient = new Resend(RESEND_API_KEY!);
+  return resendClient;
+}
+
+// Sender + reply-to fall back gracefully across providers.
+const FROM =
+  process.env.EMAIL_FROM ??
+  (usingGmail
+    ? `Conscious Travel <${GMAIL_USER}>`
+    : "Conscious Travel <onboarding@resend.dev>");
+const REPLY_TO = process.env.EMAIL_REPLY_TO ?? GMAIL_USER ?? "hello@conscioustravel.id";
+
+async function send(args: { to: string; subject: string; html: string }) {
+  const { to, subject, html } = args;
+
+  if (usingGmail) {
+    await getGmail().sendMail({
+      from: FROM,
+      to,
+      replyTo: REPLY_TO,
+      subject,
+      html,
+    });
+    return;
+  }
+
+  await getResend().emails.send({
+    from: FROM,
+    to: [to],
+    replyTo: REPLY_TO,
+    subject,
+    html,
+  });
+}
+
+// ─── Templates ─────────────────────────────────────────────────────────
 
 const styles = {
   page: "font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #f8f3eb; padding: 32px 16px; color: #2d2620;",
@@ -74,14 +133,12 @@ export async function sendBookingConfirmation(params: BookingEmailParams): Promi
         <span style="${styles.demoTag}">Demo mode</span>
         <p style="font-size: 13px; line-height: 1.5; color: #6b6258; margin: 0;">Payment instructions will arrive in a follow-up email once the business bank, Midtrans, and Stripe gateways are wired. For now, this confirms your booking is recorded.</p>
       </div>
-      <p style="font-size: 13px; line-height: 1.6; color: #6b6258; margin: 24px 0 0;">Any questions, just reply to this email — a real person reads them.</p>
+      <p style="font-size: 13px; line-height: 1.6; color: #6b6258; margin: 24px 0 0;">Any questions, just reply to this email. A real person reads them.</p>
     </div>
   `);
 
-  await resend.emails.send({
-    from: FROM,
-    to: [to],
-    replyTo: REPLY_TO,
+  await send({
+    to,
     subject: `Booking received · ${reference}`,
     html,
   });
@@ -108,10 +165,8 @@ export async function sendInquiryReceived(params: InquiryEmailParams): Promise<v
     </div>
   `);
 
-  await resend.emails.send({
-    from: FROM,
-    to: [to],
-    replyTo: REPLY_TO,
+  await send({
+    to,
     subject: `Inquiry received · ${reference}`,
     html,
   });

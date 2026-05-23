@@ -1,0 +1,99 @@
+/* Structural styles only — colors and fonts come from the global theme. */
+
+.gallery {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 10px;
+  height: 540px;
+  margin-top: 8px;
+}
+
+.cell {
+  border-radius: var(--radius);
+  overflow: hidden;
+  position: relative;
+}
+
+.cellMain {
+  grid-row: 1 / 3;
+}
+
+.phBg1 { background-color: #ece3d2; }
+.phBg2 { background-color: #e2d6bf; }
+.phBg3 { background-color: #d6c7ac; }
+.phBg4 { background-color: #e6dbc4; }
+.phBg5 { background-color: #dccbb0; }
+
+.phPattern {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.025) 0 12px,
+    rgba(0, 0, 0, 0) 12px 24px
+  );
+}
+
+.ph {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #5a5448;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 16px;
+  text-align: center;
+}
+
+.phMain {
+  font-size: 13px;
+}
+
+/* Native <details> with custom +/– toggle that swaps on [open]. */
+
+.expand summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  font-family: var(--font-serif-display), serif;
+  font-weight: 400;
+  color: var(--foreground);
+}
+
+.expand summary::-webkit-details-marker {
+  display: none;
+}
+
+.expand summary::after {
+  content: "+";
+  font-size: 22px;
+  color: var(--accent);
+  font-family: inherit;
+  line-height: 1;
+}
+
+.expand[open] summary::after {
+  content: "–";
+}
+
+/* Mobile gallery reflow. */
+@media (max-width: 960px) {
+  .gallery {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 200px 200px 200px;
+    height: auto;
+  }
+
+  .cellMain {
+    grid-column: 1 / 3;
+    grid-row: 1;
+  }
+}

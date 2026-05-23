@@ -1,0 +1,74 @@
+.root {
+  --paper: #e9e6e0;
+  --ink: #1a1a1a;
+  --green: oklch(0.58 0.13 150);
+  --green-soft: oklch(0.70 0.10 150);
+  --green-deep: oklch(0.42 0.11 150);
+
+  display: grid;
+  place-items: center;
+  perspective: 900px;
+  perspective-origin: 50% 45%;
+}
+
+.stage {
+  width: 200px;
+  height: 200px;
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.rig {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  animation: tree-y-spin 6s linear infinite;
+}
+
+.plane {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  backface-visibility: visible;
+}
+
+.plane svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.p1 { transform: rotateY(0deg); }
+.p2 { transform: rotateY(60deg); }
+.p3 { transform: rotateY(120deg); }
+
+.p2 svg, .p3 svg {
+  opacity: 0.92;
+}
+
+.ground {
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  width: 110px;
+  height: 18px;
+  transform: translateX(-50%) rotateX(78deg);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0) 70%);
+  filter: blur(1.5px);
+  animation: tree-ground-pulse 6s linear infinite;
+}
+
+@keyframes tree-y-spin {
+  from { transform: rotateY(0deg); }
+  to   { transform: rotateY(360deg); }
+}
+
+@keyframes tree-ground-pulse {
+  0%, 100% { width: 110px; opacity: 0.95; }
+  50%      { width: 92px;  opacity: 0.75; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rig, .ground { animation: none; }
+}

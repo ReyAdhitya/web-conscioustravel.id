@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "Sustainability",
   description:
-    "Five commitments that shape every Conscious Travel journey — from carbon and plastic to fair wages, local ownership, and regenerative impact projects.",
+    "Five commitments that shape every Conscious Travel journey. From carbon and plastic to fair wages, local ownership, and regenerative impact projects.",
   openGraph: {
-    title: "Sustainability — Conscious Travel Indonesia",
+    title: "Sustainability · Conscious Travel Indonesia",
     description:
-      "Five commitments that shape every Conscious Travel journey — from carbon and plastic to fair wages, local ownership, and regenerative impact projects.",
+      "Five commitments that shape every Conscious Travel journey. From carbon and plastic to fair wages, local ownership, and regenerative impact projects.",
     type: "website",
   },
 };
@@ -29,7 +29,7 @@ const commitments = [
   {
     label: "Plastic",
     title: "Zero single-use plastic on operated trips.",
-    body: "Refillable bottles at every stop, reusable utensils for picnic days, partnership with operators who've committed to the same. It's not a slogan — it's a checklist we maintain.",
+    body: "Refillable bottles at every stop, reusable utensils for picnic days, partnership with operators who've committed to the same. It's not a slogan, it's a checklist we maintain.",
   },
   {
     label: "Fair wages",
@@ -72,7 +72,7 @@ export default function SustainabilityPage() {
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/90 sm:text-lg">
             Five concrete commitments. Measured, published, and audited every quarter. Not a
-            marketing badge — a constraint we&apos;ve accepted.
+            marketing badge. A constraint we&apos;ve accepted.
           </p>
         </div>
       </section>
@@ -135,7 +135,7 @@ export default function SustainabilityPage() {
           </h2>
           <p className="text-muted-foreground mt-6 text-base leading-relaxed sm:text-lg">
             Sustainability claims in travel are mostly marketing. We&apos;re trying to do something
-            different — publish actual numbers, audit them quarterly, and be honest about where we
+            different. Publish actual numbers, audit them quarterly, and be honest about where we
             still fall short. The first quarterly report drops in late 2026; subscribe below if
             you&apos;d like a copy.
           </p>
@@ -148,7 +148,7 @@ export default function SustainabilityPage() {
             </p>
             <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
               Operator pay rates, carbon estimates per itinerary, a list of every regenerative
-              project we&apos;ve funded — including the ones that didn&apos;t work. Free to read.
+              project we&apos;ve funded, including the ones that didn&apos;t work. Free to read.
             </p>
           </div>
         </div>
@@ -160,7 +160,7 @@ export default function SustainabilityPage() {
             Travel that <span className="italic">earns its place</span>.
           </h2>
           <p className="text-muted-foreground mt-4 text-base leading-relaxed">
-            Browse journeys built around these commitments — or tell us what you&apos;re imagining.
+            Browse journeys built around these commitments, or tell us what you&apos;re imagining.
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
             <Button

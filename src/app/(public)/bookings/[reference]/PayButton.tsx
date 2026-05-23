@@ -76,7 +76,7 @@ export function PayButton({ bookingId, snapUrl, clientKey, initiatePayment, onSu
           Pay now with Midtrans
         </h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Bank transfer, GoPay, OVO, QRIS, or credit card — choose at the next step.
+          Bank transfer, GoPay, OVO, QRIS, or credit card. Choose at the next step.
         </p>
         {error && (
           <p className="mt-4 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">

@@ -92,7 +92,7 @@ export default async function BookingConfirmationPage({
           <dl className="grid gap-4 text-sm sm:grid-cols-2">
             <div>
               <dt className="text-xs tracking-wide text-muted-foreground">Journey</dt>
-              <dd className="mt-1 text-foreground">{tour?.title ?? "—"}</dd>
+              <dd className="mt-1 text-foreground">{tour?.title ?? "n/a"}</dd>
             </div>
             <div>
               <dt className="text-xs tracking-wide text-muted-foreground">Travelers</dt>
@@ -149,7 +149,7 @@ export default async function BookingConfirmationPage({
               </div>
               <div className="flex justify-between border-b border-border/40 pb-2">
                 <dt className="text-muted-foreground">Account number</dt>
-                <dd className="font-mono text-muted-foreground italic">— pending real account —</dd>
+                <dd className="font-mono text-muted-foreground italic">pending real account</dd>
               </div>
               <div className="flex justify-between">
                 <dt className="text-muted-foreground">Amount</dt>

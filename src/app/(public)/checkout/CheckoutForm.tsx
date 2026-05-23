@@ -194,7 +194,7 @@ export function CheckoutForm({
       </Button>
 
       <p className="text-[11px] text-muted-foreground">
-        By submitting you agree to our booking terms. You won&apos;t be charged yet — payment
+        By submitting you agree to our booking terms. You won&apos;t be charged yet. Payment
         instructions arrive by email.
       </p>
     </form>

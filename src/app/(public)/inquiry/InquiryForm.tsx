@@ -48,7 +48,7 @@ export function InquiryForm() {
           <Field label="Approx. end date" name="travelEnd" type="date" />
           <Field label="Travelers" name="groupSize" type="number" min={1} max={50} defaultValue={2} />
         </div>
-        <p className="text-xs text-muted-foreground">Dates are flexible — leave empty if you&apos;re still deciding.</p>
+        <p className="text-xs text-muted-foreground">Dates are flexible. Leave empty if you&apos;re still deciding.</p>
       </Section>
 
       <Section title="Style of journey">
@@ -66,7 +66,7 @@ export function InquiryForm() {
         </div>
       </Section>
 
-      <Section title="Budget" subtitle="Optional — gives us a sensible starting point.">
+      <Section title="Budget" subtitle="Optional. Gives us a sensible starting point.">
         <div className="grid gap-4 sm:grid-cols-3">
           <label className="flex flex-col gap-1.5">
             <span className="text-xs tracking-wide text-muted-foreground">Currency</span>
@@ -75,7 +75,7 @@ export function InquiryForm() {
               defaultValue=""
               className="rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-accent focus:outline-none"
             >
-              <option value="">—</option>
+              <option value="">Select currency</option>
               <option value="IDR">IDR (Rp)</option>
               <option value="USD">USD ($)</option>
               <option value="EUR">EUR (€)</option>
@@ -118,7 +118,7 @@ export function InquiryForm() {
           {pending ? "Sending…" : "Send inquiry"}
         </Button>
         <p className="text-[11px] text-muted-foreground">
-          We respond within two business days. No card needed — quoting is free and no-obligation.
+          We respond within two business days. No card needed. Quoting is free and no-obligation.
         </p>
       </div>
     </form>

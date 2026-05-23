@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Conscious Travel was started in Ubud out of frustration with how Indonesia is sold to mass tourism. We work small, slow, and local — and we'd like you to as well.",
+    "Conscious Travel was started in Ubud out of frustration with how Indonesia is sold to mass tourism. We work small, slow, and local, and we'd like you to as well.",
   openGraph: {
     title: "About Conscious Travel Indonesia",
     description:
-      "Conscious Travel was started in Ubud out of frustration with how Indonesia is sold to mass tourism. We work small, slow, and local — and we'd like you to as well.",
+      "Conscious Travel was started in Ubud out of frustration with how Indonesia is sold to mass tourism. We work small, slow, and local, and we'd like you to as well.",
     type: "website",
   },
 };
@@ -22,7 +22,7 @@ const principles = [
   },
   {
     title: "We tell you who gets paid.",
-    body: "Every itinerary has a transparent cost breakdown — who's hosting you, who's guiding you, who's driving. The shape of the trip should match the shape of the impact.",
+    body: "Every itinerary has a transparent cost breakdown. Who's hosting you, who's guiding you, who's driving. The shape of the trip should match the shape of the impact.",
   },
   {
     title: "We say no often.",
@@ -73,14 +73,14 @@ export default function AboutPage() {
           <div className="prose-content text-base leading-relaxed text-muted-foreground sm:text-lg">
             <p>
               Conscious Travel began with a list of small operators across Bali, Java, Flores, and
-              Sumba whom we trusted personally — yoga teachers, sailing crews, cooking grandmothers,
+              Sumba whom we trusted personally. Yoga teachers, sailing crews, cooking grandmothers,
               tracking guides. People who&apos;d been doing this work, well, long before tourism was
               a category.
             </p>
             <p className="mt-4">
               The instinct was simple: if you wanted to travel Indonesia in a way that wasn&apos;t
-              extractive — that paid people fairly, used resources lightly, left places more whole
-              than it found them — there should be a place that just makes that easy.
+              extractive, that paid people fairly, used resources lightly, left places more whole
+              than it found them, there should be a place that just makes that easy.
             </p>
             <p className="mt-4">
               That&apos;s what we&apos;re building. Slowly. Capped at small numbers per departure,

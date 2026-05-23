@@ -1,10 +1,19 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Fraunces } from "next/font/google";
+import { Manrope, Fraunces, Geist_Mono } from "next/font/google";
+import { IntroOverlay } from "@/components/loaders/IntroOverlay";
 import "./globals.css";
 
-const geistSans = Geist({
+const manrope = Manrope({
   variable: "--font-sans",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const fraunces = Fraunces({
+  variable: "--font-serif-display",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
 });
 
 const geistMono = Geist_Mono({
@@ -12,16 +21,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
-});
-
 export const metadata: Metadata = {
   title: {
-    default: "Conscious Travel — Sustainable & Mindful Journeys in Indonesia",
+    default: "Conscious Travel · Sustainable & Mindful Journeys in Indonesia",
     template: "%s · Conscious Travel",
   },
   description:
@@ -37,9 +39,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}
+      className={`${manrope.variable} ${fraunces.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="bg-background text-foreground flex min-h-full flex-col">{children}</body>
+      <body className="bg-background text-foreground flex min-h-full flex-col">
+        <IntroOverlay />
+        {children}
+      </body>
     </html>
   );
 }

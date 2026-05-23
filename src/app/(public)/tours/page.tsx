@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description:
     "Sustainable, wellness-focused tours and slow-travel stays across Indonesia. Filter by category to find the right journey.",
   openGraph: {
-    title: "Journeys — Conscious Travel Indonesia",
+    title: "Journeys · Conscious Travel Indonesia",
     description:
       "Sustainable, wellness-focused tours and slow-travel stays across Indonesia. Filter by category to find the right journey.",
     type: "website",
@@ -67,23 +67,25 @@ export default async function ToursPage({
 
   return (
     <>
-      <section className="border-border/50 bg-background border-b px-6 py-20 sm:px-12 lg:px-20">
-        <div className="mx-auto w-full max-w-7xl">
-          <p className="text-muted-foreground mb-4 text-xs tracking-[0.25em] uppercase">Journeys</p>
-          <h1 className="text-foreground font-serif text-4xl leading-tight tracking-tight sm:text-5xl">
+      <section className="border-border/60 border-b px-6 py-20 sm:px-8">
+        <div className="mx-auto w-full max-w-[1280px]">
+          <p className="text-muted-foreground mb-4 text-[11px] tracking-[0.25em] uppercase">
+            Journeys
+          </p>
+          <h1 className="font-serif text-[44px] leading-[1.02] tracking-[-0.015em] sm:text-[56px] md:text-[64px]">
             Travel that <span className="text-accent italic">returns more than it takes</span>.
           </h1>
-          <p className="text-muted-foreground mt-6 max-w-2xl text-base leading-relaxed sm:text-lg">
-            Curated low-impact journeys across the Indonesian archipelago — small groups, local
+          <p className="text-ink-soft mt-7 max-w-[600px] text-base leading-[1.65] sm:text-lg">
+            Curated low-impact journeys across the Indonesian archipelago. Small groups, local
             partners, and time enough to slow down.
           </p>
         </div>
       </section>
 
-      <section className="bg-background px-6 py-12 sm:px-12 lg:px-20">
-        <div className="mx-auto w-full max-w-7xl">
-          <div className="border-border/50 mb-12 flex flex-wrap items-center gap-x-2 gap-y-3 border-b pb-8">
-            <span className="text-muted-foreground mr-3 text-xs tracking-[0.2em] uppercase">
+      <section className="px-6 py-14 sm:px-8">
+        <div className="mx-auto w-full max-w-[1280px]">
+          <div className="border-border/60 mb-12 flex flex-wrap items-center gap-x-2 gap-y-3 border-b pb-8">
+            <span className="text-muted-foreground mr-3 text-[11px] tracking-[0.2em] uppercase">
               Filter
             </span>
             {categoryFilters.map((f) => {
@@ -95,7 +97,7 @@ export default async function ToursPage({
                   className={`rounded-full border px-4 py-1.5 text-xs tracking-wide transition ${
                     active
                       ? "border-accent bg-accent text-accent-foreground"
-                      : "border-border/60 text-muted-foreground hover:border-accent/50 hover:text-foreground"
+                      : "border-border text-ink-soft hover:border-accent/50 hover:text-foreground"
                   }`}
                 >
                   {f.label}
@@ -112,7 +114,7 @@ export default async function ToursPage({
                   className={`rounded-full border px-4 py-1.5 text-xs tracking-wide transition ${
                     active
                       ? "border-foreground bg-foreground text-background"
-                      : "border-border/60 text-muted-foreground hover:border-foreground/60 hover:text-foreground"
+                      : "border-border text-ink-soft hover:border-foreground/60 hover:text-foreground"
                   }`}
                 >
                   {f.label}
@@ -130,8 +132,8 @@ export default async function ToursPage({
           </div>
 
           {tours.length === 0 ? (
-            <div className="border-border/50 flex flex-col items-center gap-3 rounded-xl border border-dashed px-6 py-20 text-center">
-              <p className="text-foreground font-serif text-2xl tracking-tight">
+            <div className="border-border bg-card flex flex-col items-center gap-3 rounded-[var(--radius)] border border-dashed px-6 py-20 text-center">
+              <p className="font-serif text-foreground text-2xl tracking-tight">
                 No journeys match these filters.
               </p>
               <p className="text-muted-foreground max-w-md text-sm">
@@ -150,8 +152,8 @@ export default async function ToursPage({
                 {tours.length} {tours.length === 1 ? "journey" : "journeys"}
               </p>
               <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                {tours.map((tour) => (
-                  <TourCard key={tour.id} tour={tour} />
+                {tours.map((tour, i) => (
+                  <TourCard key={tour.id} tour={tour} index={i} />
                 ))}
               </div>
             </>

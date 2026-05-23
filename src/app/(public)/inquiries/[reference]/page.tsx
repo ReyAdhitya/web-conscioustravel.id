@@ -80,7 +80,7 @@ export default async function InquiryConfirmationPage({
               <div>
                 <dt className="text-xs tracking-wide text-muted-foreground">Budget per person</dt>
                 <dd className="mt-1 text-foreground">
-                  {formatPrice(inquiry.budgetMinMinor, inquiry.budgetCurrency)} —{" "}
+                  {formatPrice(inquiry.budgetMinMinor, inquiry.budgetCurrency)} to{" "}
                   {formatPrice(inquiry.budgetMaxMinor, inquiry.budgetCurrency)}
                 </dd>
               </div>

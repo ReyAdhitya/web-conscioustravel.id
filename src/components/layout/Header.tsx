@@ -1,67 +1,118 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 
 const navItems = [
-  { href: "/tours", label: "Tours" },
-  { href: "/sustainability", label: "Sustainability" },
+  { href: "/", label: "Home" },
+  { href: "/tours", label: "Journeys" },
   { href: "/inquiry", label: "Custom journey" },
+  { href: "/sustainability", label: "Journal" },
   { href: "/about", label: "About" },
 ];
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Lock body scroll while the mobile menu is open.
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
 
   return (
-    <header className="border-border/60 bg-background/80 sticky top-0 z-40 border-b backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 sm:px-12 lg:px-20">
-        <Link
-          href="/"
-          className="font-serif text-lg tracking-tight"
-          onClick={() => setOpen(false)}
-        >
-          <span className="text-foreground">Conscious</span>
-          <span className="text-accent">.</span>
-          <span className="text-muted-foreground">travel</span>
-        </Link>
+    <>
+      <header
+        className={`fixed z-40 backdrop-blur-md transition-all duration-300
+          inset-x-0 top-0 rounded-none border-b
+          md:inset-x-auto md:top-6 md:left-1/2 md:-translate-x-1/2 md:max-w-[95vw] md:rounded-full md:border
+          ${
+            scrolled
+              ? "border-border/50 bg-background/90 shadow-[0_10px_30px_rgba(31,42,36,0.12)]"
+              : "border-border/30 bg-background/65 shadow-[0_4px_18px_rgba(31,42,36,0.06)]"
+          }`}
+      >
+        <div className="mx-auto flex w-full max-w-[1280px] items-center justify-between gap-3 px-5 py-3 md:max-w-none md:gap-6 md:py-2.5 md:pr-2 md:pl-5">
+          <Link
+            href="/"
+            className="inline-flex items-center"
+            onClick={() => setOpen(false)}
+            aria-label="conscioustravel.id home"
+          >
+            <Image
+              src="/logo.png"
+              alt="conscioustravel.id"
+              width={1560}
+              height={330}
+              priority
+              className="h-8 w-auto sm:h-9"
+            />
+          </Link>
 
-        <nav className="text-muted-foreground hidden items-center gap-8 text-sm sm:flex">
-          {navItems.map((item) => (
-            <Link key={item.href} href={item.href} className="hover:text-foreground transition">
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+          <nav className="text-ink-soft hidden items-center gap-7 text-[13px] md:flex">
+            {navItems.map((item) => (
+              <Link key={item.href} href={item.href} className="hover:text-accent transition-colors">
+                {item.label}
+              </Link>
+            ))}
+          </nav>
 
-        <button
-          type="button"
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-          className="text-foreground hover:text-accent flex h-10 w-10 items-center justify-center rounded-full transition sm:hidden"
-        >
-          {open ? <X size={20} /> : <Menu size={20} />}
-        </button>
-      </div>
+          <Link
+            href="/inquiry"
+            className="bg-accent-deep text-background hover:bg-accent hidden rounded-full px-4 py-2 text-[13px] font-medium transition-colors md:inline-flex"
+          >
+            Book a stay
+          </Link>
+
+          <button
+            type="button"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+            className="text-foreground hover:text-accent flex h-10 w-10 items-center justify-center rounded-full transition md:hidden"
+          >
+            {open ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+      </header>
 
       {open && (
-        <div className="border-border/60 bg-background border-t sm:hidden">
-          <nav className="mx-auto flex max-w-7xl flex-col px-6 py-4">
+        <div className="bg-background/95 fixed inset-0 top-[64px] z-30 overflow-y-auto backdrop-blur-md md:hidden">
+          <nav className="mx-auto flex max-w-md flex-col px-6 pt-6 pb-12">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="text-foreground hover:text-accent border-border/40 border-b py-4 text-base tracking-tight transition last:border-b-0"
+                className="text-foreground hover:text-accent border-border/40 border-b py-5 text-xl transition last:border-b-0"
               >
                 {item.label}
               </Link>
             ))}
+            <Link
+              href="/inquiry"
+              onClick={() => setOpen(false)}
+              className="bg-accent-deep text-background mt-8 inline-flex justify-center rounded-full px-6 py-4 text-base font-medium"
+            >
+              Book a stay
+            </Link>
           </nav>
         </div>
       )}
-    </header>
+    </>
   );
 }
