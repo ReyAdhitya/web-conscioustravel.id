@@ -23,10 +23,8 @@ const importantLinks = [
 ];
 
 const socialLinks = [
-  { href: "#", label: "Instagram" },
+  { href: "https://www.instagram.com/conscioustravel.id/", label: "Instagram" },
   { href: "#", label: "LinkedIn" },
-  { href: "#", label: "YouTube" },
-  { href: "#", label: "TikTok" },
 ];
 
 export function Footer() {
@@ -70,11 +68,19 @@ export function Footer() {
               Indonesia
             </address>
             <div className="text-ink-soft mt-7 flex flex-wrap gap-x-[18px] gap-y-2 text-sm">
-              {socialLinks.map((social) => (
-                <a key={social.label} href={social.href} className="hover:text-accent transition">
-                  {social.label}
-                </a>
-              ))}
+              {socialLinks.map((social) => {
+                const isExternal = social.href.startsWith("http");
+                return (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    className="hover:text-accent transition"
+                    {...(isExternal && { target: "_blank", rel: "noopener noreferrer" })}
+                  >
+                    {social.label}
+                  </a>
+                );
+              })}
             </div>
           </div>
 
