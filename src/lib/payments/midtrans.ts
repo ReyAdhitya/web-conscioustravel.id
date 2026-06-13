@@ -1,4 +1,4 @@
-import { createHash } from "node:crypto";
+import { createHash, timingSafeEqual } from "node:crypto";
 
 const isProduction = process.env.MIDTRANS_IS_PRODUCTION === "true";
 const SNAP_BASE = isProduction
@@ -71,5 +71,12 @@ export function verifyMidtransSignature(
     .update(`${orderId}${statusCode}${grossAmount}${serverKey}`)
     .digest("hex");
 
-  return expected === signatureKey;
+  // Constant-time comparison so a malicious caller can't recover the expected
+  // signature byte-by-byte via response timing. timingSafeEqual requires equal
+  // lengths; the expected digest length is public (128 hex chars for sha512),
+  // so an early length-mismatch return leaks nothing secret.
+  const expectedBuf = Buffer.from(expected, "utf8");
+  const providedBuf = Buffer.from(signatureKey ?? "", "utf8");
+  if (expectedBuf.length !== providedBuf.length) return false;
+  return timingSafeEqual(expectedBuf, providedBuf);
 }
