@@ -190,6 +190,37 @@ export function CheckoutForm({
         </fieldset>
       )}
 
+      <fieldset className="flex flex-col gap-2">
+        <label
+          htmlFor="paxCount"
+          className={`text-xs tracking-wide ${state.errors?.paxCount ? "text-destructive font-medium" : "text-muted-foreground"}`}
+        >
+          Number of travellers
+          <span aria-hidden> *</span>
+        </label>
+        <input
+          id="paxCount"
+          name="paxCount"
+          type="number"
+          min={1}
+          max={20}
+          defaultValue={1}
+          required
+          aria-invalid={state.errors?.paxCount ? "true" : undefined}
+          aria-describedby={state.errors?.paxCount ? "paxCount-error" : undefined}
+          className={`w-32 rounded-lg bg-background px-3 py-2.5 text-sm text-foreground focus:outline-none ${
+            state.errors?.paxCount
+              ? "border-2 border-destructive bg-destructive/5 focus:border-destructive"
+              : "border border-border focus:border-accent"
+          }`}
+        />
+        {state.errors?.paxCount && (
+          <span id="paxCount-error" className="text-xs font-medium text-destructive">
+            {state.errors.paxCount}
+          </span>
+        )}
+      </fieldset>
+
       <fieldset className="flex flex-col gap-4">
         <legend className="text-xs tracking-[0.2em] uppercase text-muted-foreground">
           Contact details

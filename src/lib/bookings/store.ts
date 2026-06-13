@@ -27,6 +27,18 @@ export async function getAllBookings(limit = 50): Promise<Booking[]> {
   return db.select().from(bookings).orderBy(desc(bookings.createdAt)).limit(limit);
 }
 
+export async function appendBookingNotes(id: string, note: string): Promise<Booking> {
+  const [updated] = await db
+    .update(bookings)
+    .set({
+      notes: sql`CASE WHEN ${bookings.notes} IS NULL OR ${bookings.notes} = '' THEN ${note} ELSE ${bookings.notes} || ' ' || ${note} END`,
+      updatedAt: sql`now()`,
+    })
+    .where(eq(bookings.id, id))
+    .returning();
+  return updated;
+}
+
 export async function updateBookingStatus(
   id: string,
   status: Booking["status"],

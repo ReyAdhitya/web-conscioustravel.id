@@ -1,4 +1,4 @@
-import { and, asc, eq, gte, ne } from "drizzle-orm";
+import { and, asc, eq, gte, ne, sql } from "drizzle-orm";
 import { db } from "@/lib/db/client";
 import { departures, type Departure, type NewDeparture } from "@/lib/db/schema";
 
@@ -49,4 +49,39 @@ export async function deleteDeparture(id: string): Promise<void> {
 export async function getDepartureById(id: string): Promise<Departure | null> {
   const [found] = await db.select().from(departures).where(eq(departures.id, id)).limit(1);
   return found ?? null;
+}
+
+export async function incrementDepartureBookedCount(
+  departureId: string,
+  by = 1,
+): Promise<void> {
+  await db
+    .update(departures)
+    .set({
+      bookedCount: sql`${departures.bookedCount} + ${by}`,
+      updatedAt: sql`now()`,
+    })
+    .where(eq(departures.id, departureId));
+}
+
+export async function getDepartureWithCapacityCheck(
+  departureId: string,
+  requestedPax: number,
+): Promise<Departure> {
+  const departure = await getDepartureById(departureId);
+  if (!departure) {
+    throw new Error(`Departure ${departureId} not found.`);
+  }
+  if (departure.status !== "open") {
+    throw new Error(
+      `Departure ${departureId} is not open for booking (status: ${departure.status}).`,
+    );
+  }
+  if (departure.bookedCount + requestedPax > departure.capacity) {
+    const remaining = departure.capacity - departure.bookedCount;
+    throw new Error(
+      `Departure ${departureId} cannot accommodate ${requestedPax} traveler(s); ${remaining} seat(s) remaining.`,
+    );
+  }
+  return departure;
 }

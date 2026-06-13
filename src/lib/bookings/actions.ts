@@ -6,9 +6,17 @@ import { randomUUID } from "node:crypto";
 import { getTourBySlug } from "@/lib/content/tours";
 import { sendBookingConfirmation } from "@/lib/email";
 import { formatPrice } from "@/lib/format";
-import { getDepartureById } from "@/lib/departures/store";
+import { getDepartureWithCapacityCheck } from "@/lib/departures/store";
 import { generateBookingReference } from "./reference";
-import { createBookingRecord } from "./store";
+import { appendBookingNotes, createBookingRecord } from "./store";
+
+const optionalIsoDate = z
+  .union([
+    z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Please enter a valid date"),
+    z.literal(""),
+  ])
+  .optional()
+  .transform((v) => (v ? v : undefined));
 
 const checkoutSchema = z.object({
   tourSlug: z.string().min(1, "Tour is required"),
@@ -16,6 +24,9 @@ const checkoutSchema = z.object({
   contactName: z.string().min(2, "Please enter your full name"),
   contactEmail: z.string().email("Please enter a valid email"),
   contactPhone: z.string().min(6, "Please enter a phone number we can reach you on"),
+  paxCount: z.coerce.number().int().min(1).max(20),
+  arrivalDate: optionalIsoDate,
+  departureDate: optionalIsoDate,
   notes: z.string().max(2000).optional(),
 });
 
@@ -34,6 +45,9 @@ export async function submitCheckout(
     contactName: formData.get("contactName")?.toString() ?? "",
     contactEmail: formData.get("contactEmail")?.toString() ?? "",
     contactPhone: formData.get("contactPhone")?.toString() ?? "",
+    paxCount: formData.get("paxCount")?.toString() ?? "1",
+    arrivalDate: formData.get("arrivalDate")?.toString() || undefined,
+    departureDate: formData.get("departureDate")?.toString() || undefined,
     notes: formData.get("notes")?.toString() || undefined,
   };
 
@@ -63,33 +77,47 @@ export async function submitCheckout(
   let totalMinor = tour.basePriceMinor;
 
   if (parsed.data.departureId) {
-    const departure = await getDepartureById(parsed.data.departureId);
-    if (!departure) {
-      return { errors: { departureId: "That departure is no longer available." }, message: "Please fix the highlighted fields." };
-    }
-    if (departure.status === "sold_out") {
-      return { errors: { departureId: "That departure is sold out." }, message: "Please fix the highlighted fields." };
-    }
-    departureId = departure.id;
-    if (departure.priceOverrideMinor != null) {
-      totalMinor = departure.priceOverrideMinor;
+    try {
+      const departure = await getDepartureWithCapacityCheck(
+        parsed.data.departureId,
+        parsed.data.paxCount,
+      );
+      departureId = departure.id;
+      if (departure.priceOverrideMinor != null) {
+        totalMinor = departure.priceOverrideMinor;
+      }
+    } catch (e) {
+      const message = e instanceof Error ? e.message : "That departure is no longer available.";
+      return {
+        errors: { departureId: message },
+        message: "Please fix the highlighted fields.",
+      };
     }
   }
 
+  totalMinor = totalMinor * BigInt(parsed.data.paxCount);
+
+  const noteParts: string[] = [];
+  if (parsed.data.arrivalDate) noteParts.push(`Arrival: ${parsed.data.arrivalDate}`);
+  if (parsed.data.departureDate) noteParts.push(`Departure: ${parsed.data.departureDate}`);
+  if (parsed.data.notes) noteParts.push(parsed.data.notes);
+  const composedNotes = noteParts.length > 0 ? noteParts.join(" | ") : null;
+
   const reference = generateBookingReference();
+  const bookingId = randomUUID();
 
   await createBookingRecord({
-    id: randomUUID(),
+    id: bookingId,
     reference,
     departureId,
     contactName: parsed.data.contactName,
     contactEmail: parsed.data.contactEmail,
     contactPhone: parsed.data.contactPhone,
-    paxCount: 1,
+    paxCount: parsed.data.paxCount,
     totalMinor,
     currency: tour.baseCurrency,
     status: "pending_payment",
-    notes: parsed.data.notes ?? null,
+    notes: composedNotes,
     cancelledAt: null,
     cancellationReason: null,
   });
@@ -100,11 +128,17 @@ export async function submitCheckout(
       firstName: parsed.data.contactName.split(" ")[0] ?? parsed.data.contactName,
       reference,
       tourTitle: tour.title,
-      paxCount: 1,
+      paxCount: parsed.data.paxCount,
       totalDisplay: formatPrice(totalMinor, tour.baseCurrency),
     });
   } catch (e) {
     console.error("[booking] failed to send confirmation email:", e);
+    const message = e instanceof Error ? e.message : String(e);
+    try {
+      await appendBookingNotes(bookingId, `[EMAIL_FAILED: ${message}]`);
+    } catch (noteErr) {
+      console.error("[booking] failed to record email failure note:", noteErr);
+    }
   }
 
   redirect(`/bookings/${reference}`);
