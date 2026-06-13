@@ -1,9 +1,7 @@
 import Link from "next/link";
 import { NewsletterForm } from "./NewsletterForm";
 
-const generalLinks = [
-  { href: "/inquiry", label: "Get in touch ↗" },
-];
+const generalLinks = [{ href: "/inquiry", label: "Get in touch ↗" }];
 
 const menuLinks = [
   { href: "/", label: "Home" },
@@ -46,10 +44,10 @@ export function Footer() {
 
         <div className="border-border/60 grid gap-12 border-t pt-12 md:grid-cols-[1.2fr_1fr_1fr] md:gap-12">
           <div>
-            <h4 className="text-muted-foreground mb-[18px] text-xs font-medium">
+            <h3 className="text-muted-foreground mb-4 font-sans text-[11px] font-medium tracking-[0.2em] uppercase">
               General inquiries & partnerships
-            </h4>
-            <div className="flex flex-col gap-2.5">
+            </h3>
+            <div className="flex flex-col gap-3">
               {generalLinks.map((link) => (
                 <Link
                   key={link.href}
@@ -67,7 +65,7 @@ export function Footer() {
               <br />
               Indonesia
             </address>
-            <div className="text-ink-soft mt-7 flex flex-wrap gap-x-[18px] gap-y-2 text-sm">
+            <div className="text-ink-soft mt-8 flex flex-wrap gap-x-4 gap-y-2 text-sm">
               {socialLinks.map((social) => {
                 const isExternal = social.href.startsWith("http");
                 return (
@@ -85,8 +83,10 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="text-muted-foreground mb-[18px] text-xs font-medium">Menu</h4>
-            <div className="flex flex-col gap-2.5">
+            <h3 className="text-muted-foreground mb-4 font-sans text-[11px] font-medium tracking-[0.2em] uppercase">
+              Menu
+            </h3>
+            <div className="flex flex-col gap-3">
               {menuLinks.map((link) => (
                 <Link
                   key={link.label}
@@ -100,10 +100,10 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="text-muted-foreground mb-[18px] text-xs font-medium">
+            <h3 className="text-muted-foreground mb-4 font-sans text-[11px] font-medium tracking-[0.2em] uppercase">
               Important Links
-            </h4>
-            <div className="flex flex-col gap-2.5">
+            </h3>
+            <div className="flex flex-col gap-3">
               {importantLinks.map((link) => (
                 <Link
                   key={link.label}

@@ -11,7 +11,7 @@ export function NewsletterForm() {
 
   return (
     <div>
-      <p className="text-ink-soft mb-3.5 text-sm">Letters from the road, every other Sunday.</p>
+      <p className="text-ink-soft mb-4 text-sm">Letters from the road, every other Sunday.</p>
       <form
         action={action}
         className={`bg-card flex items-center rounded-full py-2 pr-2 pl-[22px] transition-colors ${
@@ -31,14 +31,18 @@ export function NewsletterForm() {
           type="submit"
           aria-label="Subscribe"
           disabled={pending || state.status === "success"}
-          className="bg-accent-deep text-background hover:bg-accent grid size-[42px] place-items-center rounded-full transition disabled:opacity-60"
+          className="bg-accent-deep text-background hover:bg-accent grid size-11 place-items-center rounded-full transition-colors disabled:opacity-60"
         >
-          {state.status === "success" ? <Check className="size-4" /> : <ArrowRight className="size-4" />}
+          {state.status === "success" ? (
+            <Check className="size-4" />
+          ) : (
+            <ArrowRight className="size-4" />
+          )}
         </button>
       </form>
       {state.message && (
         <p
-          className={`mt-2.5 text-xs ${
+          className={`mt-2 text-xs ${
             state.status === "success" ? "text-accent" : "text-destructive"
           }`}
         >

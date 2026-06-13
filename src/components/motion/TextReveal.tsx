@@ -22,7 +22,9 @@ const wordVariants: Variants = {
   visible: {
     y: 0,
     opacity: 1,
-    transition: { type: "spring", stiffness: 110, damping: 16, mass: 0.8 },
+    // Expo-out tween, not a spring: the word settles without overshoot, per the
+    // "no bounce / spring / elastic on UI" rule.
+    transition: { duration: 0.5, ease: [0.19, 1, 0.22, 1] },
   },
 };
 

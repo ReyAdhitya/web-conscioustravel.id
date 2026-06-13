@@ -58,13 +58,13 @@ export function CheckoutForm({
       {state.message && (
         <div
           role="alert"
-          className="border-destructive/40 bg-destructive/10 text-destructive flex items-start gap-3 rounded-xl border-2 px-4 py-3.5 text-sm"
+          className="border-destructive/40 bg-destructive/10 text-destructive flex items-start gap-3 rounded-xl border-2 px-4 py-4 text-sm"
         >
           <AlertCircle className="mt-0.5 size-5 shrink-0" />
           <div>
             <p className="font-medium">{state.message}</p>
             {hasErrors && (
-              <ul className="mt-1.5 list-inside list-disc text-[13px] opacity-90">
+              <ul className="mt-2 list-inside list-disc text-[13px] opacity-90">
                 {Object.entries(state.errors ?? {}).map(([key, msg]) => (
                   <li key={key}>{msg}</li>
                 ))}
@@ -79,13 +79,12 @@ export function CheckoutForm({
           role="alert"
           className="border-border bg-card flex flex-col gap-2 rounded-xl border-2 border-dashed px-5 py-5"
         >
-          <p className="font-serif text-foreground text-lg tracking-[-0.005em]">
+          <p className="text-foreground font-serif text-lg tracking-[-0.005em]">
             No scheduled departures yet.
           </p>
           <p className="text-ink-soft text-sm leading-[1.6]">
-            This journey runs on fixed dates and none are currently published. Send a quick
-            inquiry and we&apos;ll come back with the next available group within two business
-            days.
+            This journey runs on fixed dates and none are currently published. Send a quick inquiry
+            and we&apos;ll come back with the next available group within two business days.
           </p>
           <a
             href={`/inquiry?tour=${tourSlug}`}
@@ -98,9 +97,9 @@ export function CheckoutForm({
 
       {isFixed && (
         <fieldset className="flex flex-col gap-3">
-          <legend className="text-xs tracking-[0.2em] uppercase text-muted-foreground">
+          <legend className="text-muted-foreground text-xs tracking-[0.2em] uppercase">
             Choose your departure date{" "}
-            <span className="normal-case tracking-normal text-destructive">*</span>
+            <span className="text-destructive tracking-normal normal-case">*</span>
           </legend>
           <input type="hidden" name="departureId" value={selectedDepartureId} />
           <div className="flex flex-col gap-3">
@@ -111,12 +110,12 @@ export function CheckoutForm({
               return (
                 <label
                   key={dep.id}
-                  className={`flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition-colors ${
+                  className={`has-[:focus-visible]:outline-accent flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition-colors has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 ${
                     soldOut
-                      ? "cursor-not-allowed border-border/40 bg-muted/30 opacity-60"
+                      ? "border-border/40 bg-muted/30 cursor-not-allowed opacity-60"
                       : selected
-                        ? "border-2 border-accent bg-accent/5"
-                        : "border border-border/60 bg-card hover:border-border"
+                        ? "border-accent bg-accent/5"
+                        : "border-border/60 bg-card hover:border-border"
                   }`}
                 >
                   <input
@@ -133,18 +132,21 @@ export function CheckoutForm({
                       selected ? "border-accent bg-accent" : "border-border/60 bg-background"
                     }`}
                   >
-                    {selected && <span className="h-1.5 w-1.5 rounded-full bg-background" />}
+                    {selected && <span className="bg-background h-1.5 w-1.5 rounded-full" />}
                   </span>
                   <span className="flex flex-col gap-0.5 text-sm">
-                    <span className="font-medium text-foreground">
+                    <span className="text-foreground font-medium">
                       {formatDateRange(dep.startsOn, dep.endsOn)}
                     </span>
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-muted-foreground text-xs">
                       {dep.priceOverrideMinor != null
                         ? formatPrice(dep.priceOverrideMinor, "IDR")
                         : null}
                       {dep.bookedCount > 0 && !soldOut && (
-                        <> · {spotsLeft} {spotsLeft === 1 ? "spot" : "spots"} left</>
+                        <>
+                          {" "}
+                          · {spotsLeft} {spotsLeft === 1 ? "spot" : "spots"} left
+                        </>
                       )}
                       {soldOut && <> · Sold out</>}
                     </span>
@@ -154,36 +156,36 @@ export function CheckoutForm({
             })}
           </div>
           {state.errors?.departureId && (
-            <span className="text-xs text-destructive">{state.errors.departureId}</span>
+            <span className="text-destructive text-xs">{state.errors.departureId}</span>
           )}
         </fieldset>
       )}
 
       {!isFixed && tourKind === "open" && (
         <fieldset className="flex flex-col gap-4">
-          <legend className="text-xs tracking-[0.2em] uppercase text-muted-foreground">
+          <legend className="text-muted-foreground text-xs tracking-[0.2em] uppercase">
             Your travel dates (optional)
           </legend>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-muted-foreground text-xs">
             We&apos;ll confirm availability within 24 hours.
           </p>
           <div className="grid gap-4 sm:grid-cols-2">
-            <label htmlFor="arrivalDate" className="flex flex-col gap-1.5">
-              <span className="text-xs tracking-wide text-muted-foreground">Arrival date</span>
+            <label htmlFor="arrivalDate" className="flex flex-col gap-2">
+              <span className="text-muted-foreground text-xs tracking-wide">Arrival date</span>
               <input
                 id="arrivalDate"
                 name="arrivalDate"
                 type="date"
-                className="rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-accent focus:outline-none"
+                className="border-border bg-background text-foreground focus:border-accent rounded-lg border px-3 py-2.5 text-sm focus:outline-none"
               />
             </label>
-            <label htmlFor="departureDate" className="flex flex-col gap-1.5">
-              <span className="text-xs tracking-wide text-muted-foreground">Departure date</span>
+            <label htmlFor="departureDate" className="flex flex-col gap-2">
+              <span className="text-muted-foreground text-xs tracking-wide">Departure date</span>
               <input
                 id="departureDate"
                 name="departureDate"
                 type="date"
-                className="rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-accent focus:outline-none"
+                className="border-border bg-background text-foreground focus:border-accent rounded-lg border px-3 py-2.5 text-sm focus:outline-none"
               />
             </label>
           </div>
@@ -208,21 +210,21 @@ export function CheckoutForm({
           required
           aria-invalid={state.errors?.paxCount ? "true" : undefined}
           aria-describedby={state.errors?.paxCount ? "paxCount-error" : undefined}
-          className={`w-32 rounded-lg bg-background px-3 py-2.5 text-sm text-foreground focus:outline-none ${
+          className={`bg-background text-foreground w-32 rounded-lg px-3 py-2.5 text-sm focus:outline-none ${
             state.errors?.paxCount
-              ? "border-2 border-destructive bg-destructive/5 focus:border-destructive"
-              : "border border-border focus:border-accent"
+              ? "border-destructive bg-destructive/5 focus:border-destructive border-2"
+              : "border-border focus:border-accent border"
           }`}
         />
         {state.errors?.paxCount && (
-          <span id="paxCount-error" className="text-xs font-medium text-destructive">
+          <span id="paxCount-error" className="text-destructive text-xs font-medium">
             {state.errors.paxCount}
           </span>
         )}
       </fieldset>
 
       <fieldset className="flex flex-col gap-4">
-        <legend className="text-xs tracking-[0.2em] uppercase text-muted-foreground">
+        <legend className="text-muted-foreground text-xs tracking-[0.2em] uppercase">
           Contact details
         </legend>
 
@@ -252,10 +254,7 @@ export function CheckoutForm({
       </fieldset>
 
       <fieldset className="flex flex-col gap-2">
-        <label
-          htmlFor="notes"
-          className="text-xs tracking-[0.2em] uppercase text-muted-foreground"
-        >
+        <label htmlFor="notes" className="text-muted-foreground text-xs tracking-[0.2em] uppercase">
           Anything we should know? (optional)
         </label>
         <textarea
@@ -263,7 +262,7 @@ export function CheckoutForm({
           name="notes"
           rows={4}
           maxLength={2000}
-          className="rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-accent focus:outline-none"
+          className="border-border bg-background text-foreground placeholder:text-muted-foreground/60 focus:border-accent rounded-lg border px-3 py-2.5 text-sm focus:outline-none"
           placeholder="Dietary needs, mobility considerations, special requests…"
         />
       </fieldset>
@@ -271,7 +270,7 @@ export function CheckoutForm({
       <Button
         type="submit"
         disabled={pending || isFixedButEmpty}
-        className="mt-4 h-12 self-start rounded-full px-8 text-sm tracking-wide"
+        className="hover:bg-accent mt-4 h-12 self-start rounded-full px-8 text-sm tracking-wide"
       >
         {pending ? "Submitting…" : "Confirm booking"}
       </Button>
@@ -281,7 +280,7 @@ export function CheckoutForm({
         </p>
       )}
 
-      <p className="text-[11px] text-muted-foreground">
+      <p className="text-muted-foreground text-[11px]">
         By submitting you agree to our booking terms. You won&apos;t be charged yet. Payment
         instructions arrive by email.
       </p>
@@ -305,7 +304,7 @@ function Field({
   error?: string;
 }) {
   return (
-    <label htmlFor={name} className="flex flex-col gap-1.5">
+    <label htmlFor={name} className="flex flex-col gap-2">
       <span
         className={`text-xs tracking-wide ${error ? "text-destructive font-medium" : "text-muted-foreground"}`}
       >
@@ -320,14 +319,14 @@ function Field({
         autoComplete={autoComplete}
         aria-invalid={error ? "true" : undefined}
         aria-describedby={error ? `${name}-error` : undefined}
-        className={`rounded-lg bg-background px-3 py-2.5 text-sm text-foreground focus:outline-none ${
+        className={`bg-background text-foreground rounded-lg px-3 py-2.5 text-sm focus:outline-none ${
           error
-            ? "border-2 border-destructive bg-destructive/5 focus:border-destructive"
-            : "border border-border focus:border-accent"
+            ? "border-destructive bg-destructive/5 focus:border-destructive border-2"
+            : "border-border focus:border-accent border"
         }`}
       />
       {error && (
-        <span id={`${name}-error`} className="text-xs font-medium text-destructive">
+        <span id={`${name}-error`} className="text-destructive text-xs font-medium">
           {error}
         </span>
       )}

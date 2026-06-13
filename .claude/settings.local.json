@@ -37,7 +37,8 @@
       "Bash(dir \".claude\\\\worktrees\\\\agent-ab270f638755ed527\\\\__tests__\")",
       "Bash(npx vitest *)",
       "Bash(vercel env *)",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "WebSearch"
     ]
   }
 }

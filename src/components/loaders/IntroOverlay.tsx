@@ -16,6 +16,9 @@ export function IntroOverlay() {
     if (alreadyShown) return;
 
     sessionStorage.setItem(SESSION_KEY, "1");
+    // First-visit gate: sessionStorage is client-only, so the overlay is promoted
+    // from its SSR-safe "hidden" state here, on mount.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPhase("visible");
 
     // Lock scroll while the overlay is up.
@@ -26,7 +29,7 @@ export function IntroOverlay() {
     const removeTimer = window.setTimeout(() => {
       setPhase("hidden");
       document.body.style.overflow = prevOverflow;
-    }, 3200);
+    }, 3000); // 2400ms held + 600ms exit
 
     return () => {
       window.clearTimeout(exitTimer);
@@ -38,10 +41,14 @@ export function IntroOverlay() {
   if (phase === "hidden") return null;
 
   return (
+    // Exit reads as a curtain rising — fade + lift away over 600ms on an
+    // expo-out curve — so it sets the editorial tone, never feels like a spinner.
     <div
       aria-hidden={phase === "leaving"}
-      className={`bg-background fixed inset-0 z-[200] flex flex-col items-center justify-center gap-8 transition-opacity duration-700 ease-out ${
-        phase === "leaving" ? "pointer-events-none opacity-0" : "opacity-100"
+      className={`bg-background fixed inset-0 z-[200] flex flex-col items-center justify-center gap-8 transition duration-[600ms] ease-[cubic-bezier(0.19,1,0.22,1)] ${
+        phase === "leaving"
+          ? "pointer-events-none -translate-y-8 opacity-0"
+          : "translate-y-0 opacity-100"
       }`}
     >
       <TreeLoader label="Welcome to conscioustravel.id" />

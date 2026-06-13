@@ -1,16 +1,16 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useReducedMotion } from "motion/react";
 import type { Tour } from "@/lib/db/schema";
 import { formatPrice } from "@/lib/format";
+import { Reveal } from "@/components/ui/Reveal";
 
+// Soft, warm placeholder washes shown only when a tour has no hero image.
+// All four stay within the cream / sage / earth family — no cool hues.
 const categoryGradients: Record<Tour["category"], string> = {
   wellness: "from-[#e6dbc4] to-[#d6c7ac]",
   eco: "from-[#dde4d0] to-[#b8c6a8]",
   cultural: "from-[#ece3d2] to-[#d6c7ac]",
-  adventure: "from-[#d2dadd] to-[#a7b5b8]",
+  adventure: "from-[#d6c7ac] to-[#b8c6a8]",
 };
 
 const categoryLabel: Record<Tour["category"], string> = {
@@ -30,32 +30,17 @@ function isValidUrl(url: string) {
 }
 
 export function TourCard({ tour, index = 0 }: { tour: Tour; index?: number }) {
-  const reduce = useReducedMotion();
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{
-        duration: 0.85,
-        ease: [0.22, 1, 0.36, 1],
-        delay: Math.min(index, 4) * 0.08,
-      }}
-      whileHover={reduce ? undefined : { y: -4 }}
-    >
+    // Entrance comes from the shared Reveal system (opacity + rise, staggered by
+    // grid position). Hover stays to border + title colour at 150ms — no lift,
+    // no shadow jump, no image zoom — so the card reads as interactive without
+    // performing.
+    <Reveal index={index} className="h-full">
       <Link
         href={`/tours/${tour.slug}`}
-        className="group bg-card border-border/60 hover:border-accent/40 flex flex-col overflow-hidden rounded-[var(--radius)] border transition-colors hover:shadow-[0_8px_28px_rgba(31,42,36,0.08)]"
+        className="group bg-card border-border/60 hover:border-accent/50 flex h-full flex-col overflow-hidden rounded-[var(--radius)] border transition-colors duration-150"
       >
-        <motion.div
-          initial={{ clipPath: "inset(0 0 100% 0)" }}
-          whileInView={{ clipPath: "inset(0 0 0% 0)" }}
-          viewport={{ once: true, amount: 0.25 }}
-          transition={{
-            duration: 1.05,
-            ease: [0.65, 0, 0.35, 1],
-            delay: Math.min(index, 4) * 0.08 + 0.1,
-          }}
+        <div
           className={`relative aspect-[4/5] w-full overflow-hidden bg-gradient-to-br ${categoryGradients[tour.category]}`}
         >
           {tour.heroImageUrl && isValidUrl(tour.heroImageUrl) ? (
@@ -64,21 +49,21 @@ export function TourCard({ tour, index = 0 }: { tour: Tour; index?: number }) {
               alt={tour.title}
               fill
               sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-              className="object-cover transition duration-700 group-hover:scale-[1.04]"
+              className="object-cover"
             />
           ) : (
-            <div className="absolute inset-0 bg-[repeating-linear-gradient(135deg,rgba(0,0,0,0.025)_0_12px,transparent_12px_24px)]" />
+            <div className="absolute inset-0 bg-[repeating-linear-gradient(135deg,rgba(31,42,36,0.04)_0_12px,transparent_12px_24px)]" />
           )}
-          <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1.5 text-[10px] font-medium tracking-[0.18em] text-[#1f2a24] uppercase shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
+          <div className="border-border/40 bg-background/90 text-foreground absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[10px] font-medium tracking-[0.18em] uppercase backdrop-blur-sm">
             {categoryLabel[tour.category]}
             {tour.kind === "open" && <span className="text-muted-foreground">· flexible</span>}
           </div>
-        </motion.div>
+        </div>
         <div className="flex flex-1 flex-col gap-3 p-6">
-          <h3 className="font-serif text-foreground group-hover:text-accent text-[22px] leading-tight tracking-[-0.01em] transition-colors">
+          <h3 className="text-foreground group-hover:text-accent font-serif text-[22px] leading-tight tracking-[-0.01em] transition-colors duration-150">
             {tour.title}
           </h3>
-          <p className="text-ink-soft line-clamp-2 text-[14.5px] leading-[1.6]">
+          <p className="text-ink-soft line-clamp-2 text-sm leading-[1.6]">
             {tour.shortDescription}
           </p>
           <div className="border-border/60 mt-auto flex items-baseline justify-between border-t pt-4">
@@ -92,6 +77,6 @@ export function TourCard({ tour, index = 0 }: { tour: Tour; index?: number }) {
           </div>
         </div>
       </Link>
-    </motion.div>
+    </Reveal>
   );
 }

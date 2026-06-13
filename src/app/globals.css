@@ -182,3 +182,38 @@
     ),
     var(--background);
 }
+
+/* WhatsApp availability pulse — a single ring breathing behind the button to
+   signal "we're here", without the button itself ever moving. The element is
+   invisible (opacity 0) until the animation drives it, so reduced-motion users
+   simply see a still button. Ring only. */
+@keyframes ct-availability-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  70%,
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ct-availability-pulse {
+    animation: ct-availability-pulse 2s cubic-bezier(0.19, 1, 0.22, 1) infinite;
+  }
+}
+
+/* Respect users who ask for less motion: neutralise CSS animations and collapse
+   transition durations site-wide. Framer Motion components honour this
+   separately via useReducedMotion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
