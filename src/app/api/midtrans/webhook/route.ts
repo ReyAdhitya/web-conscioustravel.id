@@ -2,8 +2,9 @@ import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { verifyMidtransSignature } from "@/lib/payments/midtrans";
 import { resolveBookingStatus, resolvePaymentStatus } from "@/lib/payments/status";
-import { createPaymentRecord } from "@/lib/payments/store";
+import { createPaymentRecord, getPaymentByGatewayTxnId } from "@/lib/payments/store";
 import { getBookingByReference, updateBookingStatus } from "@/lib/bookings/store";
+import { incrementDepartureBookedCount } from "@/lib/departures/store";
 
 type MidtransWebhookBody = {
   order_id: string;
@@ -43,18 +44,27 @@ export async function POST(request: Request): Promise<NextResponse> {
       newBookingStatus,
       newBookingStatus === "cancelled" ? `Midtrans: ${transaction_status}` : undefined,
     );
+    if (newBookingStatus === "confirmed" && booking.departureId) {
+      await incrementDepartureBookedCount(booking.departureId, booking.paxCount);
+    }
   }
 
-  await createPaymentRecord({
-    id: randomUUID(),
-    bookingId: booking.id,
-    gateway: "midtrans",
-    gatewayTransactionId: transaction_id ?? null,
-    amountMinor: BigInt(Math.round(parseFloat(gross_amount))),
-    currency: booking.currency,
-    status: resolvePaymentStatus(transaction_status),
-    rawResponse: body as Record<string, unknown>,
-  });
+  const existing = transaction_id
+    ? await getPaymentByGatewayTxnId("midtrans", transaction_id)
+    : null;
+
+  if (!existing) {
+    await createPaymentRecord({
+      id: randomUUID(),
+      bookingId: booking.id,
+      gateway: "midtrans",
+      gatewayTransactionId: transaction_id ?? null,
+      amountMinor: BigInt(gross_amount.split(".")[0]),
+      currency: booking.currency,
+      status: resolvePaymentStatus(transaction_status),
+      rawResponse: body as Record<string, unknown>,
+    });
+  }
 
   return NextResponse.json({ ok: true });
 }
