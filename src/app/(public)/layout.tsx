@@ -1,5 +1,6 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { MagneticCursor } from "@/components/motion/MagneticCursor";
 
@@ -20,6 +21,7 @@ export default function PublicLayout({
         {children}
       </main>
       <Footer />
+      <WhatsAppButton />
     </>
   );
 }
