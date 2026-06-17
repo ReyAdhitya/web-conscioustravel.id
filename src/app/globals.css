@@ -11,6 +11,9 @@
   --color-ink-soft: var(--ink-soft);
   --color-line: var(--line);
   --color-accent-deep: var(--accent-deep);
+  --color-hero-paper: var(--hero-paper);
+  --color-hero-ink: var(--hero-ink);
+  --color-hero-accent: var(--hero-accent);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
   --font-serif: var(--font-serif-display);
@@ -68,10 +71,15 @@
   --secondary: #f1ece1;
   --secondary-foreground: #1f2a24;
   --muted: #f1ece1;
-  --muted-foreground: #8a8478;  /* warm gray */
+  --muted-foreground: #6b6456;  /* warm gray — darkened to clear WCAG AA (5.48:1 on bg, 4.98:1 on card) */
   --accent: #2d5240;            /* forest green */
   --accent-foreground: #faf7f1;
   --accent-deep: #162a22;
+  /* Hero-only tones — slightly deeper greens + warmer cream tuned to read over the
+     WebGL field. Named tokens so the hero never inlines raw hex (DESIGN.md rule). */
+  --hero-paper: #f6f3ec;        /* hero cream wash */
+  --hero-ink: #0f2419;          /* hero headline / primary CTA — darkest green */
+  --hero-accent: #1a3a2a;       /* hero forest — italic, body, hover */
   --destructive: #c54e3e;
   --border: #e8dfcc;            /* soft sand */
   --line: #e8dfcc;
@@ -165,6 +173,23 @@
   top: 16px;
   outline: 2px solid var(--background);
   outline-offset: 2px;
+}
+
+/* Film-grain paper texture — a fixed, pointer-events-none wash that gives the cream
+   surface a tactile, printed feel (the one detail worth borrowing from the
+   high-end-visual-design "Editorial Luxury" archetype). GPU-safe: painted once, no
+   blur, no scroll listeners. Sits above page content (z-20) but below the fixed
+   header (z-40) so it never mutes the navigation or CTAs. */
+.ct-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  opacity: 0.04;
+  mix-blend-mode: multiply;
+  background-size: 200px 200px;
+  /* background-image (SVG noise data-URI) is set inline in (public)/layout.tsx —
+     Lightning CSS drops the rule if the data-URI lives here. */
 }
 
 /* Soft radial hero background used on landing-style pages. */

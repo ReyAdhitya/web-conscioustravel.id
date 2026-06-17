@@ -70,7 +70,7 @@ All values are live CSS custom properties in `globals.css`. Use Tailwind semanti
 | `--card`                  | `bg-card`                       | `#f1ece1`   | Card backgrounds                     |
 | `--card-foreground`       | `text-card-foreground`          | `#1f2a24`   | Text inside cards                    |
 | `--ink-soft`              | `text-ink-soft`                 | `#3a4640`   | Secondary body text                  |
-| `--muted-foreground`      | `text-muted-foreground`         | `#8a8478`   | Captions, helper text, placeholders  |
+| `--muted-foreground`      | `text-muted-foreground`         | `#6b6456`   | Captions, helper text, placeholders (WCAG AA ✓) |
 | `--accent`                | `bg-accent`, `text-accent`      | `#2d5240`   | Forest green — interactive elements  |
 | `--accent-foreground`     | `text-accent-foreground`        | `#faf7f1`   | Text on accent backgrounds           |
 | `--accent-deep`           | `bg-accent-deep`                | `#162a22`   | Primary CTAs, nav, dark actions      |
@@ -199,7 +199,10 @@ Rules:
 ```jsx
 // Tour card — editorial style, NOT shadcn Card defaults
 <div className="rounded-[var(--radius)] border border-border/60 bg-card overflow-hidden">
-  {/* Image: aspect-ratio 16/10, NOT 4/3 */}
+  {/* Image ratio system (only two, by role):
+        · Lead / featured-hero card  → aspect-[16/10]  (cinematic, wide)
+        · Standard tour card / grid  → aspect-[4/5]     (portrait, editorial)
+      Never introduce a third ratio (no 4/3). */}
   {/* Title: font-serif text-xl */}
   {/* Category: text-xs tracking-[0.2em] uppercase text-muted-foreground */}
 </div>

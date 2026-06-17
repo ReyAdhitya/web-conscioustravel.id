@@ -56,29 +56,29 @@ export default async function HomePage() {
 
   return (
     <>
-      <section className="relative isolate -mt-16 flex min-h-screen flex-col justify-center overflow-hidden bg-[#f6f3ec] px-6 pt-24 pb-16 sm:px-8 md:-mt-24 md:justify-end md:pt-36 md:pb-24">
+      <section className="bg-hero-paper relative isolate -mt-16 flex min-h-screen flex-col justify-center overflow-hidden px-6 pt-24 pb-16 sm:px-8 md:-mt-24 md:justify-end md:pt-36 md:pb-24">
         <div className="absolute inset-0 z-0">
           <FieldWallpaper className="block h-full w-full" />
         </div>
         {/* Soft paper wash anchored to the text area so the cycling headline always reads */}
-        <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-[#f6f3ec]/70 via-[#f6f3ec]/15 to-transparent md:from-[#f6f3ec]/55 md:via-transparent" />
+        <div className="from-hero-paper/70 via-hero-paper/15 md:from-hero-paper/55 pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t to-transparent md:via-transparent" />
 
         <div className="relative z-10 mx-auto w-full max-w-[1280px] text-center md:text-left">
           <TextReveal
             as="p"
             text="Sustainable & wellness travel · Indonesia"
-            className="mb-5 text-[11px] tracking-[0.22em] text-[#1a3a2a]/75 uppercase md:mb-6 md:text-[11px] md:tracking-[0.25em]"
+            className="text-hero-accent/75 mb-5 text-[11px] tracking-[0.22em] uppercase md:mb-6 md:text-[11px] md:tracking-[0.25em]"
             stagger={0.025}
           />
           <CyclingHeadline
-            className="font-serif text-[44px] leading-[1.02] tracking-[-0.02em] text-[#0f2419] sm:text-[56px] md:text-6xl lg:text-7xl xl:text-[88px]"
-            italicClassName="text-[#1a3a2a]"
+            className="text-hero-ink font-serif text-[44px] leading-[1.02] tracking-[-0.02em] sm:text-[56px] md:text-6xl lg:text-7xl xl:text-[88px]"
+            italicClassName="text-hero-accent"
           />
           <Reveal
             delay={0.7}
             className="mx-auto mt-7 max-w-[520px] md:mx-0 md:mt-8 md:max-w-[560px]"
           >
-            <p className="text-[15px] leading-[1.65] text-[#1a3a2a]/85 sm:text-base md:text-lg">
+            <p className="text-hero-accent/85 text-[15px] leading-[1.65] sm:text-base md:text-lg">
               Curated low-impact journeys across the archipelago. Wellness retreats, community-led
               stays, and quiet corners off the package-tour map.
             </p>
@@ -90,7 +90,7 @@ export default async function HomePage() {
             <MagneticButton>
               <Link
                 href="/tours"
-                className="inline-flex h-12 items-center rounded-full bg-[#0f2419] px-7 text-sm font-medium text-[#f6f3ec] shadow-lg transition-colors hover:bg-[#1a3a2a]"
+                className="bg-hero-ink text-hero-paper hover:bg-hero-accent inline-flex h-12 items-center rounded-full px-7 text-sm font-medium shadow-lg transition-colors"
               >
                 Explore journeys
               </Link>
@@ -98,9 +98,9 @@ export default async function HomePage() {
             <MagneticButton>
               <Link
                 href="/inquiry"
-                className="inline-flex h-12 items-center rounded-full border border-[#0f2419] px-7 text-sm font-medium text-[#0f2419] backdrop-blur-sm transition-colors hover:bg-[#0f2419] hover:text-[#f6f3ec]"
+                className="border-hero-ink text-hero-ink hover:bg-hero-ink hover:text-hero-paper inline-flex h-12 items-center rounded-full border px-7 text-sm font-medium backdrop-blur-sm transition-colors"
               >
-                Plan a custom trip
+                Plan a custom journey
               </Link>
             </MagneticButton>
           </Reveal>
@@ -231,7 +231,7 @@ export default async function HomePage() {
                       href="/tours"
                       className="border-border text-foreground hover:bg-bg-soft inline-flex h-12 items-center rounded-full border px-7 text-sm font-medium transition-colors"
                     >
-                      Browse journeys
+                      Explore journeys
                     </Link>
                   </MagneticButton>
                 </div>
@@ -290,7 +290,7 @@ function LeadFeature({ tour }: { tour: Tour }) {
 function SecondaryFeature({ tour }: { tour: Tour }) {
   return (
     <Link href={`/tours/${tour.slug}`} className="group block">
-      <div className="bg-bg-soft relative aspect-[4/3] w-full overflow-hidden rounded-[var(--radius)]">
+      <div className="bg-bg-soft relative aspect-[4/5] w-full overflow-hidden rounded-[var(--radius)]">
         {isValidUrl(tour.heroImageUrl) ? (
           <Image
             src={tour.heroImageUrl}

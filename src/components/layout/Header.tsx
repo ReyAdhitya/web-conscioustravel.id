@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
 
 const navItems = [
@@ -18,6 +18,8 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const panelRef = useRef<HTMLDivElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
 
   // A nav item is active on its own route and any nested route beneath it.
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
@@ -36,6 +38,22 @@ export function Header() {
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = prev;
+    };
+  }, [open]);
+
+  // Keyboard a11y for the full-screen mobile menu: Escape closes it, focus moves
+  // into the panel on open, and returns to the toggle on close.
+  useEffect(() => {
+    if (!open) return;
+    const toggle = toggleRef.current;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    panelRef.current?.querySelector<HTMLAnchorElement>("a")?.focus();
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      toggle?.focus();
     };
   }, [open]);
 
@@ -61,7 +79,7 @@ export function Header() {
               width={1560}
               height={330}
               priority
-              className="h-8 w-auto shrink-0 md:h-7 lg:h-9"
+              className="h-8 w-auto shrink-0 lg:h-9"
             />
           </Link>
 
@@ -91,9 +109,11 @@ export function Header() {
           </Link>
 
           <button
+            ref={toggleRef}
             type="button"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
+            aria-controls="mobile-menu"
             onClick={() => setOpen((v) => !v)}
             className="text-foreground hover:text-accent flex h-11 w-11 items-center justify-center rounded-full transition-colors md:hidden"
           >
@@ -103,7 +123,14 @@ export function Header() {
       </header>
 
       {open && (
-        <div className="bg-background/95 fixed inset-0 top-16 z-30 overflow-y-auto backdrop-blur-md md:hidden">
+        <div
+          ref={panelRef}
+          id="mobile-menu"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Site menu"
+          className="bg-background/95 fixed inset-0 top-16 z-30 overflow-y-auto backdrop-blur-md md:hidden"
+        >
           <nav className="mx-auto flex max-w-md flex-col px-6 pt-6 pb-12">
             {navItems.map((item) => {
               const active = isActive(item.href);

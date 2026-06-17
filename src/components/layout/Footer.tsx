@@ -6,10 +6,10 @@ const generalLinks = [{ href: "/inquiry", label: "Get in touch ↗" }];
 const menuLinks = [
   { href: "/", label: "Home" },
   { href: "/tours", label: "Journeys" },
+  { href: "/stays", label: "Stays" },
   { href: "/inquiry", label: "Custom journey" },
   { href: "/sustainability", label: "Journal" },
   { href: "/about", label: "About" },
-  { href: "/inquiry", label: "Contact" },
 ];
 
 const importantLinks = [
@@ -22,7 +22,6 @@ const importantLinks = [
 
 const socialLinks = [
   { href: "https://www.instagram.com/conscioustravel.id/", label: "Instagram" },
-  { href: "#", label: "LinkedIn" },
 ];
 
 export function Footer() {
