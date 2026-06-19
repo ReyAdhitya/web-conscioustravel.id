@@ -238,7 +238,7 @@ function CheckGroup({ name, options }: { name: string; options: string[] }) {
       {options.map((opt) => (
         <label
           key={opt}
-          className="group inline-flex cursor-pointer items-center gap-2 rounded-full border border-border/60 bg-background px-4 py-1.5 text-xs tracking-wide text-muted-foreground transition has-[:checked]:border-accent has-[:checked]:bg-accent/10 has-[:checked]:text-accent hover:border-accent/40 hover:text-foreground"
+          className="group inline-flex cursor-pointer items-center gap-2 rounded-full border border-border/60 bg-background px-4 py-1.5 text-xs tracking-wide text-muted-foreground transition has-[:checked]:border-accent has-[:checked]:bg-accent/10 has-[:checked]:text-accent hover:border-accent/40 hover:text-foreground has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-accent"
         >
           <input type="checkbox" name={name} value={opt} className="sr-only" />
           <span>{opt}</span>

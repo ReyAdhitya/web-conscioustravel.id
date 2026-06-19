@@ -46,7 +46,7 @@ export default function StaysIndexPage() {
               <Link
                 key={stay.slug}
                 href={`/stays/${stay.slug}`}
-                className="group bg-card border-border/60 hover:border-accent/40 flex flex-col overflow-hidden rounded-[var(--radius)] border transition-colors hover:shadow-[0_8px_28px_rgba(31,42,36,0.08)]"
+                className="group bg-card border-border/60 hover:border-accent/40 flex flex-col overflow-hidden rounded-[var(--radius)] border transition-colors"
               >
                 <div className="relative grid aspect-[16/10] grid-cols-3 gap-1.5 overflow-hidden p-1.5">
                   {stay.tints.map((tint, i) => (

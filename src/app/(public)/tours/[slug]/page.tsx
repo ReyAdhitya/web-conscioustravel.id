@@ -176,7 +176,7 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
                         <span className="text-muted-foreground text-[10px] tracking-[0.2em] uppercase">
                           Day
                         </span>
-                        <span className="text-foreground/35 mt-1 block font-serif text-4xl leading-none tracking-[-0.03em] tabular-nums sm:text-[3.25rem]">
+                        <span className="text-foreground/50 mt-1 block font-serif text-4xl leading-none tracking-[-0.03em] tabular-nums sm:text-[3.25rem]">
                           {String(day.day).padStart(2, "0")}
                         </span>
                       </div>
@@ -323,25 +323,11 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
                   </div>
                 )
               ) : (
-                <label className="text-muted-foreground flex flex-col gap-1.5 text-xs tracking-wide">
-                  Preferred start date
-                  <input
-                    type="date"
-                    className="border-border bg-background text-foreground rounded-lg border px-3 py-2.5 text-sm"
-                  />
-                </label>
+                <p className="text-ink-soft border-border bg-background rounded-lg border px-4 py-3 text-sm leading-[1.5]">
+                  Available year-round. You&apos;ll choose your dates and party size at the next
+                  step.
+                </p>
               )}
-
-              <label className="text-muted-foreground flex flex-col gap-1.5 text-xs tracking-wide">
-                Travelers
-                <input
-                  type="number"
-                  min={tour.minPax}
-                  max={tour.maxPax}
-                  defaultValue={tour.minPax}
-                  className="border-border bg-background text-foreground rounded-lg border px-3 py-2.5 text-sm"
-                />
-              </label>
             </div>
 
             <Link

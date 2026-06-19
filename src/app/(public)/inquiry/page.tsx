@@ -24,7 +24,7 @@ export default function InquiryPage() {
           <h1 className="text-foreground font-serif text-4xl leading-tight tracking-tight sm:text-5xl">
             Tell us how you want to <span className="text-accent italic">travel</span>.
           </h1>
-          <p className="text-muted-foreground mt-6 max-w-2xl text-base leading-relaxed sm:text-lg">
+          <p className="text-ink-soft mt-6 max-w-2xl text-base leading-relaxed sm:text-lg">
             We design custom journeys around how you actually want to spend your time. Send us the
             shape of your trip: dates, group, interests, rough budget. We&apos;ll come back
             within two business days with a curated proposal.
