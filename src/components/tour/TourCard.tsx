@@ -1,8 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { Tour } from "@/lib/db/schema";
 import { formatPrice } from "@/lib/format";
 import { Reveal } from "@/components/ui/Reveal";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 // Soft, warm placeholder washes shown only when a tour has no hero image.
 // All four stay within the cream / sage / earth family — no cool hues.
@@ -20,15 +20,6 @@ const categoryLabel: Record<Tour["category"], string> = {
   adventure: "Adventure",
 };
 
-function isValidUrl(url: string) {
-  try {
-    new URL(url);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
 export function TourCard({ tour, index = 0 }: { tour: Tour; index?: number }) {
   return (
     // Entrance comes from the shared Reveal system (opacity + rise, staggered by
@@ -43,17 +34,16 @@ export function TourCard({ tour, index = 0 }: { tour: Tour; index?: number }) {
         <div
           className={`relative aspect-[4/5] w-full overflow-hidden bg-gradient-to-br ${categoryGradients[tour.category]}`}
         >
-          {tour.heroImageUrl && isValidUrl(tour.heroImageUrl) ? (
-            <Image
-              src={tour.heroImageUrl}
-              alt={tour.title}
-              fill
-              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-              className="object-cover"
-            />
-          ) : (
-            <div className="absolute inset-0 bg-[repeating-linear-gradient(135deg,rgba(31,42,36,0.04)_0_12px,transparent_12px_24px)]" />
-          )}
+          <SafeImage
+            src={tour.heroImageUrl}
+            alt={tour.title}
+            fill
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            className="object-cover"
+            fallback={
+              <div className="absolute inset-0 bg-[repeating-linear-gradient(135deg,rgba(31,42,36,0.04)_0_12px,transparent_12px_24px)]" />
+            }
+          />
           <div className="border-border/40 bg-background/90 text-foreground absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[10px] font-medium tracking-[0.18em] uppercase backdrop-blur-sm">
             {categoryLabel[tour.category]}
             {tour.kind === "open" && <span className="text-muted-foreground">· flexible</span>}

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { getFeaturedTours } from "@/lib/content/tours";
 import { formatPrice } from "@/lib/format";
@@ -8,6 +7,7 @@ import { FieldWallpaper } from "@/components/background/FieldWallpaper";
 import { TextReveal } from "@/components/motion/TextReveal";
 import { MagneticButton } from "@/components/motion/MagneticButton";
 import { Reveal } from "@/components/ui/Reveal";
+import { SafeImage } from "@/components/ui/SafeImage";
 import { CyclingHeadline } from "@/components/motion/CyclingHeadline";
 
 export const revalidate = 60;
@@ -38,16 +38,6 @@ const impactStats = [
   { value: "12", label: "travelers, maximum, per departure" },
   { value: "25%", label: "above regional minimum wage, every guide" },
 ];
-
-function isValidUrl(url: string | null | undefined) {
-  if (!url) return false;
-  try {
-    new URL(url);
-    return true;
-  } catch {
-    return false;
-  }
-}
 
 export default async function HomePage() {
   const featured = await getFeaturedTours();
@@ -248,17 +238,14 @@ function LeadFeature({ tour }: { tour: Tour }) {
   return (
     <Link href={`/tours/${tour.slug}`} className="group block">
       <div className="bg-bg-soft relative aspect-[16/10] w-full overflow-hidden rounded-[var(--radius)]">
-        {isValidUrl(tour.heroImageUrl) ? (
-          <Image
-            src={tour.heroImageUrl}
-            alt={tour.title}
-            fill
-            sizes="(min-width: 1024px) 62vw, 100vw"
-            className="object-cover transition-[filter] duration-500 group-hover:brightness-[1.03]"
-          />
-        ) : (
-          <Placeholder />
-        )}
+        <SafeImage
+          src={tour.heroImageUrl}
+          alt={tour.title}
+          fill
+          sizes="(min-width: 1024px) 62vw, 100vw"
+          className="object-cover transition-[filter] duration-500 group-hover:brightness-[1.03]"
+          fallback={<Placeholder />}
+        />
       </div>
       <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
         <div>
@@ -291,17 +278,14 @@ function SecondaryFeature({ tour }: { tour: Tour }) {
   return (
     <Link href={`/tours/${tour.slug}`} className="group block">
       <div className="bg-bg-soft relative aspect-[4/5] w-full overflow-hidden rounded-[var(--radius)]">
-        {isValidUrl(tour.heroImageUrl) ? (
-          <Image
-            src={tour.heroImageUrl}
-            alt={tour.title}
-            fill
-            sizes="(min-width: 1024px) 31vw, (min-width: 640px) 45vw, 100vw"
-            className="object-cover transition-[filter] duration-500 group-hover:brightness-[1.03]"
-          />
-        ) : (
-          <Placeholder />
-        )}
+        <SafeImage
+          src={tour.heroImageUrl}
+          alt={tour.title}
+          fill
+          sizes="(min-width: 1024px) 31vw, (min-width: 640px) 45vw, 100vw"
+          className="object-cover transition-[filter] duration-500 group-hover:brightness-[1.03]"
+          fallback={<Placeholder />}
+        />
       </div>
       <p className="text-muted-foreground mt-4 text-[11px] tracking-[0.2em] uppercase">
         {categoryLabel[tour.category]}

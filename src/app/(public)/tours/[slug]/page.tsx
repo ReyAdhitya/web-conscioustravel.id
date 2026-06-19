@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -8,6 +7,7 @@ import { getUpcomingDeparturesByTourId } from "@/lib/departures/store";
 import { formatPrice } from "@/lib/format";
 import type { Tour } from "@/lib/db/schema";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 const departureFmt = new Intl.DateTimeFormat("en-GB", {
   day: "numeric",
@@ -102,18 +102,15 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
       <div className="mt-8 px-6 sm:mt-10 sm:px-12 lg:px-20">
         <div className="mx-auto w-full max-w-7xl">
           <div className="bg-bg-soft relative aspect-[16/10] w-full overflow-hidden rounded-[var(--radius-xl)] sm:aspect-[2/1]">
-            {isValidUrl(tour.heroImageUrl) ? (
-              <Image
-                src={tour.heroImageUrl}
-                alt={tour.title}
-                fill
-                priority
-                sizes="(min-width: 1280px) 1152px, 100vw"
-                className="object-cover"
-              />
-            ) : (
-              <Placeholder />
-            )}
+            <SafeImage
+              src={tour.heroImageUrl}
+              alt={tour.title}
+              fill
+              priority
+              sizes="(min-width: 1280px) 1152px, 100vw"
+              className="object-cover"
+              fallback={<Placeholder />}
+            />
           </div>
         </div>
       </div>
@@ -137,12 +134,13 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
             {plate && (
               <figure className="mt-12">
                 <div className="bg-bg-soft relative aspect-[3/2] w-full overflow-hidden rounded-[var(--radius)]">
-                  <Image
+                  <SafeImage
                     src={plate}
                     alt=""
                     fill
                     sizes="(min-width: 1024px) 64vw, 100vw"
                     className="object-cover"
+                    fallback={null}
                   />
                 </div>
               </figure>
@@ -253,12 +251,13 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
                     key={i}
                     className="bg-bg-soft relative aspect-[3/4] w-full overflow-hidden rounded-[var(--radius-md)]"
                   >
-                    <Image
+                    <SafeImage
                       src={src}
                       alt=""
                       fill
                       sizes="(min-width: 1024px) 21vw, 33vw"
                       className="object-cover"
+                      fallback={null}
                     />
                   </div>
                 ))}

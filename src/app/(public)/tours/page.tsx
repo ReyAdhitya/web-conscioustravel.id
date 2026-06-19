@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { TourCard } from "@/components/tour/TourCard";
+import { SafeImage } from "@/components/ui/SafeImage";
 import { getAllTours } from "@/lib/content/tours";
 import { formatPrice } from "@/lib/format";
 import type { Tour } from "@/lib/db/schema";
@@ -61,16 +61,6 @@ function isCategory(value: string | undefined): value is Tour["category"] {
 
 function isKind(value: string | undefined): value is Tour["kind"] {
   return value === "fixed" || value === "open";
-}
-
-function isValidUrl(url: string | null | undefined) {
-  if (!url) return false;
-  try {
-    new URL(url);
-    return true;
-  } catch {
-    return false;
-  }
 }
 
 export default async function ToursPage({
@@ -216,18 +206,15 @@ function CoverStory({ tour }: { tour: Tour }) {
     >
       <div className="lg:col-span-7">
         <div className="bg-bg-soft relative aspect-[3/2] w-full overflow-hidden rounded-[var(--radius)]">
-          {isValidUrl(tour.heroImageUrl) ? (
-            <Image
-              src={tour.heroImageUrl}
-              alt={tour.title}
-              fill
-              priority
-              sizes="(min-width: 1024px) 58vw, 100vw"
-              className="object-cover transition-[filter] duration-500 group-hover:brightness-[1.03]"
-            />
-          ) : (
-            <Placeholder />
-          )}
+          <SafeImage
+            src={tour.heroImageUrl}
+            alt={tour.title}
+            fill
+            priority
+            sizes="(min-width: 1024px) 58vw, 100vw"
+            className="object-cover transition-[filter] duration-500 group-hover:brightness-[1.03]"
+            fallback={<Placeholder />}
+          />
         </div>
       </div>
       <div className="lg:col-span-5">
@@ -294,17 +281,14 @@ function InterstitialFeature({ tour }: { tour: Tour }) {
         </div>
       </div>
       <div className="relative order-1 min-h-[240px] lg:order-2 lg:min-h-[360px]">
-        {isValidUrl(tour.heroImageUrl) ? (
-          <Image
-            src={tour.heroImageUrl}
-            alt={tour.title}
-            fill
-            sizes="(min-width: 1024px) 50vw, 100vw"
-            className="object-cover transition-[filter] duration-500 group-hover:brightness-[1.03]"
-          />
-        ) : (
-          <Placeholder />
-        )}
+        <SafeImage
+          src={tour.heroImageUrl}
+          alt={tour.title}
+          fill
+          sizes="(min-width: 1024px) 50vw, 100vw"
+          className="object-cover transition-[filter] duration-500 group-hover:brightness-[1.03]"
+          fallback={<Placeholder />}
+        />
       </div>
     </Link>
   );
