@@ -30,7 +30,11 @@ export const metadata: Metadata = {
   },
   description:
     "Eco-conscious tours, wellness retreats, and slow-travel experiences across Indonesia. Curated low-impact journeys with local communities and certified sustainable operators.",
-  metadataBase: new URL("https://conscioustravel.id"),
+  // Drives absolute URLs for OG images and canonicals. Same env-driven source as
+  // sitemap.ts / robots.ts so every environment resolves consistently.
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://conscioustravel.id",
+  ),
 };
 
 export default function RootLayout({

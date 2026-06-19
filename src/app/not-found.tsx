@@ -29,11 +29,13 @@ export default function NotFound() {
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
             <Button
+              nativeButton={false}
               render={<Link href="/tours">Browse journeys</Link>}
               className="h-12 rounded-full px-7 text-sm tracking-wide"
             />
             <Button
-              render={<Link href="/inquiry">Plan a custom trip</Link>}
+              nativeButton={false}
+              render={<Link href="/inquiry">Plan a custom journey</Link>}
               variant="ghost"
               className="h-12 rounded-full px-7 text-sm tracking-wide"
             />
