@@ -5,11 +5,11 @@ import { useEffect, useState } from "react";
 
 // Each row is one full headline state: [first line, second-line italic].
 const PHRASES: ReadonlyArray<readonly [string, string]> = [
-  ["Travel softly.", "Indonesia, slowly."],
-  ["Travel slowly.", "Indonesia, gently."],
-  ["Travel mindfully.", "Indonesia, quietly."],
-  ["Travel deeply.", "Indonesia, soulfully."],
-  ["Travel kindly.", "Indonesia, openly."],
+  ["Travel softly.", "Bali, slowly."],
+  ["Travel slowly.", "Vietnam, gently."],
+  ["Travel mindfully.", "Japan, quietly."],
+  ["Travel deeply.", "Thailand, soulfully."],
+  ["Travel kindly.", "Asia, openly."],
 ];
 
 const ease = [0.65, 0, 0.35, 1] as const;

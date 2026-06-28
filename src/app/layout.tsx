@@ -25,11 +25,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Conscious Travel · Sustainable & Mindful Journeys in Indonesia",
+    default: "Conscious Travel · Sustainable & Mindful Journeys across Asia",
     template: "%s · Conscious Travel",
   },
   description:
-    "Eco-conscious tours, wellness retreats, and slow-travel experiences across Indonesia. Curated low-impact journeys with local communities and certified sustainable operators.",
+    "Eco-conscious tours, wellness retreats, and slow-travel experiences across Indonesia, Vietnam, Thailand and Japan. Curated low-impact journeys with local communities and sustainable operators.",
   // Drives absolute URLs for OG images and canonicals. Same env-driven source as
   // sitemap.ts / robots.ts so every environment resolves consistently.
   metadataBase: new URL(

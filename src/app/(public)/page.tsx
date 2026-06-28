@@ -13,13 +13,13 @@ import { CyclingHeadline } from "@/components/motion/CyclingHeadline";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Sustainable & Mindful Journeys in Indonesia",
+  title: "Sustainable & Mindful Journeys across Asia",
   description:
-    "Curated low-impact journeys across the Indonesian archipelago. Wellness retreats, community-led stays, and slow travel with certified local operators.",
+    "Curated low-impact journeys across Indonesia, Vietnam, Thailand and Japan. Wellness retreats, community-led stays, and slow travel with trusted local operators.",
   openGraph: {
-    title: "Sustainable & Mindful Journeys in Indonesia",
+    title: "Sustainable & Mindful Journeys across Asia",
     description:
-      "Curated low-impact journeys across the Indonesian archipelago. Wellness retreats, community-led stays, and slow travel with certified local operators.",
+      "Curated low-impact journeys across Indonesia, Vietnam, Thailand and Japan. Wellness retreats, community-led stays, and slow travel with trusted local operators.",
     type: "website",
   },
 };
@@ -56,7 +56,7 @@ export default async function HomePage() {
         <div className="relative z-10 mx-auto w-full max-w-[1280px] text-center md:text-left">
           <TextReveal
             as="p"
-            text="Sustainable & wellness travel · Indonesia"
+            text="Sustainable & wellness travel · Asia"
             className="text-hero-accent/75 mb-5 text-[11px] tracking-[0.22em] uppercase md:mb-6 md:text-[11px] md:tracking-[0.25em]"
             stagger={0.025}
           />
@@ -69,8 +69,8 @@ export default async function HomePage() {
             className="mx-auto mt-7 max-w-[520px] md:mx-0 md:mt-8 md:max-w-[560px]"
           >
             <p className="text-hero-accent/85 text-[15px] leading-[1.65] sm:text-base md:text-lg">
-              Curated low-impact journeys across the archipelago. Wellness retreats, community-led
-              stays, and quiet corners off the package-tour map.
+              Curated low-impact journeys across Indonesia and beyond — Vietnam, Thailand, Japan.
+              Wellness retreats, community-led stays, and quiet corners off the package-tour map.
             </p>
           </Reveal>
           <Reveal
