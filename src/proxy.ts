@@ -10,9 +10,14 @@ import type { NextRequest } from "next/server";
 
 const COOKIE_NAME = "ct_admin";
 const LOGIN_PATH = "/admin/login";
+// Must stay in sync with `adminSecret()` in src/lib/admin/auth.ts — the login
+// action signs the cookie with this key, and this proxy verifies it. If the two
+// disagree, every valid login bounces straight back to /admin/login.
+const DEFAULT_ADMIN_SECRET = "ct-admin-default-salt-v1";
 
 function computeAdminToken(password: string): string {
-  return createHmac("sha256", password).update(password).digest("hex");
+  const secret = process.env.ADMIN_SECRET ?? DEFAULT_ADMIN_SECRET;
+  return createHmac("sha256", secret).update(password).digest("hex");
 }
 
 function tokensMatch(expected: string, actual: string): boolean {

@@ -14,6 +14,27 @@ export const metadata: Metadata = {
   },
 };
 
+// Authentic photos from the team's real journeys (extracted from the company
+// profile). Files live under /public/images/about/.
+const journeyPhotos = [
+  { src: "/images/about/01-komodo.jpg", alt: "A Komodo dragon on Flores" },
+  { src: "/images/about/02-cultural-dance.jpg", alt: "A traditional dance performance" },
+  { src: "/images/about/03-swiss-train.jpg", alt: "A scenic rail journey through the Alps" },
+  { src: "/images/about/04-paris-eiffel.jpg", alt: "Travellers at the Eiffel Tower, Paris" },
+  { src: "/images/about/05-prague-trams.jpg", alt: "Trams in the streets of Prague" },
+  { src: "/images/about/06-netherlands-windmill.jpg", alt: "A group by the windmills of the Netherlands" },
+  { src: "/images/about/07-team-building.jpg", alt: "A team-building day outdoors" },
+  { src: "/images/about/08-community-kids.jpg", alt: "Time with children from a local community" },
+  { src: "/images/about/09-scuba-diving.jpg", alt: "Diving a coral reef" },
+  { src: "/images/about/10-spain-flamenco.jpg", alt: "A flamenco performance in Spain" },
+  { src: "/images/about/11-thailand-muaythai.jpg", alt: "A Muay Thai match in Thailand" },
+  { src: "/images/about/12-weaving-craft.jpg", alt: "Traditional hand-weaving" },
+  { src: "/images/about/13-sunset-dinner.jpg", alt: "A group dinner at sunset" },
+  { src: "/images/about/14-forest-group.jpg", alt: "A group walking together through the forest" },
+  { src: "/images/about/15-beach-group.jpg", alt: "On the beach together" },
+  { src: "/images/about/16-coastal-cliffs.jpg", alt: "Walking a stretch of coastal cliffs" },
+];
+
 const principles = [
   {
     title: "We work with people, not vendors.",
@@ -93,16 +114,16 @@ export default function AboutPage() {
         <figure className="mx-auto w-full max-w-7xl">
           <div className="bg-bg-soft relative aspect-[3/2] w-full overflow-hidden rounded-[var(--radius-xl)] sm:aspect-[2/1]">
             <Image
-              src="https://images.unsplash.com/photo-1604999333679-b86d54738315?w=1800&auto=format&q=80&fit=crop"
-              alt="Terraced valley in the Indonesian highlands"
+              src="/images/about/16-coastal-cliffs.jpg"
+              alt="A coastline on one of our journeys"
               fill
               sizes="(min-width: 1280px) 1280px, 100vw"
               className="object-cover"
             />
           </div>
           <figcaption className="text-muted-foreground mt-4 max-w-[680px] text-xs leading-[1.6] tracking-[0.02em]">
-            The Sidemen valley, Bali — where several of our hosts have farmed the same terraces for
-            generations.
+            The kind of quiet, unhurried coastline our itineraries are built around — far from the
+            crowds, close to the place.
           </figcaption>
         </figure>
       </section>
@@ -133,6 +154,36 @@ export default function AboutPage() {
               </li>
             ))}
           </ol>
+        </div>
+      </section>
+
+      {/* From our journeys — authentic photographs from real trips. */}
+      <section className="border-border border-t px-6 py-20 sm:px-12 sm:py-28 lg:px-20 lg:py-32">
+        <div className="mx-auto w-full max-w-7xl">
+          <div className="max-w-[680px]">
+            <p className="text-muted-foreground text-[11px] tracking-[0.22em] uppercase">
+              From our journeys
+            </p>
+            <h2 className="text-foreground mt-5 max-w-[22ch] font-serif text-3xl leading-[1.05] tracking-[-0.025em] sm:text-4xl">
+              Real trips, real people, <span className="text-accent italic">across the world</span>.
+            </h2>
+          </div>
+          <ul className="mt-12 grid grid-cols-2 gap-3 sm:mt-16 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+            {journeyPhotos.map((photo) => (
+              <li
+                key={photo.src}
+                className="bg-bg-soft relative aspect-[4/5] overflow-hidden rounded-[var(--radius-lg)]"
+              >
+                <Image
+                  src={photo.src}
+                  alt={photo.alt}
+                  fill
+                  sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+                  className="object-cover transition-transform duration-500 hover:scale-105"
+                />
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 

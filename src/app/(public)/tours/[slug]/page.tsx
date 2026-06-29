@@ -24,6 +24,8 @@ const categoryLabel: Record<Tour["category"], string> = {
 
 function isValidUrl(url: string | null | undefined) {
   if (!url) return false;
+  // Local public/ assets are root-relative paths (e.g. "/images/tours/x.jpg").
+  if (url.startsWith("/")) return true;
   try {
     new URL(url);
     return true;

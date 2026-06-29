@@ -1,8 +1,10 @@
 // Seeds the owner's real tour packages (parsed from the proposal PDFs).
 // Idempotent: skips any tour whose slug already exists. Fixed tours get their
 // real published departures; open/group/corporate tours get none (they book via
-// inquiry/checkout without scheduled dates). Hero images are intentionally empty
-// so SafeImage renders the brand placeholder until the owner uploads real photos.
+// inquiry/checkout without scheduled dates). Tours sourced from the owner's
+// proposal PDFs (Bali, Hanoi, corporate outing, financial-literacy CSR) carry
+// local photos under /public/images/tours/<slug>/; the rest keep empty image
+// fields so SafeImage renders the brand placeholder until photos are added.
 //
 // Run:  node scripts/seed-tours-packages.mjs
 import { config } from "dotenv";
@@ -26,8 +28,14 @@ const tours = [
     durationDays: 5,
     basePriceMinor: 5900000,
     baseCurrency: "IDR",
-    heroImageUrl: "",
-    galleryImageUrls: [],
+    heroImageUrl: "/images/tours/hanoi-halong-sapa/hero.jpg",
+    galleryImageUrls: [
+      "/images/tours/hanoi-halong-sapa/gallery-01-halong-boat-pov.jpg",
+      "/images/tours/hanoi-halong-sapa/gallery-02-halong-boat.jpg",
+      "/images/tours/hanoi-halong-sapa/gallery-03-sapa-terraces.jpg",
+      "/images/tours/hanoi-halong-sapa/gallery-04-halong-dock.jpg",
+      "/images/tours/hanoi-halong-sapa/gallery-05-sapa-walk.jpg",
+    ],
     inclusions: [
       "Hotel accommodation (twin sharing)",
       "Daily breakfast",
@@ -169,8 +177,16 @@ const tours = [
     durationDays: 3,
     basePriceMinor: 1850000,
     baseCurrency: "IDR",
-    heroImageUrl: "",
-    galleryImageUrls: [],
+    heroImageUrl: "/images/tours/bali-group-experience/hero.jpg",
+    galleryImageUrls: [
+      "/images/tours/bali-group-experience/gallery-01-kintamani-jeep.jpg",
+      "/images/tours/bali-group-experience/gallery-02-group-jumping.jpg",
+      "/images/tours/bali-group-experience/gallery-03-jimbaran-seafood.jpg",
+      "/images/tours/bali-group-experience/gallery-04-hot-spring-resort.jpg",
+      "/images/tours/bali-group-experience/gallery-05-tegalalang-terrace.jpg",
+      "/images/tours/bali-group-experience/gallery-06-art-market.jpg",
+      "/images/tours/bali-group-experience/gallery-07-temple-group.jpg",
+    ],
     inclusions: [
       "2 nights hotel (twin sharing, Fairfield or Ramada)",
       "Private coach and professional guide",
@@ -202,8 +218,18 @@ const tours = [
     durationDays: 1,
     basePriceMinor: 410000,
     baseCurrency: "IDR",
-    heroImageUrl: "",
-    galleryImageUrls: [],
+    heroImageUrl: "/images/tours/corporate-outing-csr-bali/hero.jpg",
+    galleryImageUrls: [
+      "/images/tours/corporate-outing-csr-bali/gallery-01-human-pyramid.jpg",
+      "/images/tours/corporate-outing-csr-bali/gallery-02-tug-of-war.jpg",
+      "/images/tours/corporate-outing-csr-bali/gallery-03-hands-circle.jpg",
+      "/images/tours/corporate-outing-csr-bali/gallery-04-rope-pull.jpg",
+      "/images/tours/corporate-outing-csr-bali/gallery-05-jeep-adventure.jpg",
+      "/images/tours/corporate-outing-csr-bali/gallery-06-csr-planting.jpg",
+      "/images/tours/corporate-outing-csr-bali/gallery-07-live-music.jpg",
+      "/images/tours/corporate-outing-csr-bali/gallery-08-nusantara-feast.jpg",
+      "/images/tours/corporate-outing-csr-bali/gallery-09-group-dinner.jpg",
+    ],
     inclusions: [
       "Venue, permits and full event management",
       "Team-building activities (choose three)",
@@ -232,8 +258,12 @@ const tours = [
     durationDays: 1,
     basePriceMinor: 1000000,
     baseCurrency: "IDR",
-    heroImageUrl: "",
-    galleryImageUrls: [],
+    heroImageUrl: "/images/tours/financial-literacy-csr-experience/hero.jpg",
+    galleryImageUrls: [
+      "/images/tours/financial-literacy-csr-experience/gallery-01-team-arrival.jpg",
+      "/images/tours/financial-literacy-csr-experience/gallery-02-bus-departure.jpg",
+      "/images/tours/financial-literacy-csr-experience/gallery-03-goodie-bag.jpg",
+    ],
     inclusions: [
       "Round-trip AC bus, Jakarta–Bandung",
       "Full programme concept, professional team and MC",
